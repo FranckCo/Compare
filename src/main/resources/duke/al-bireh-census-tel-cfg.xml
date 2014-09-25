@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+    <schema>
+        <threshold>0.80</threshold>
+        <maybe-threshold>0.70</maybe-threshold>
+        <path>lucene</path>
+
+        <property type="ignore">
+        	<name>NUMBER</name>
+        </property>
+        <property type="ignore">
+        	<name>NEIGHBORHOOD_BLOCK</name>
+        </property>
+        <property type="ignore">
+        	<name>PARCEL</name>
+        </property>
+        <property type="ignore">
+        	<name>OWNER_BUILDING</name>
+        </property>
+        <property type="ignore">
+        	<name>OWNER_ESTABLISHMENT</name>
+        </property>
+        <property type="ignore">
+            <name>SYSTEM_NUMBER</name>
+		</property>
+        <property type="ignore">
+        	<name>COMMERCIAL_NAME</name>
+        </property>
+        <property type="ignore">
+        	<name>OPERATIONAL_STATUS</name>
+        </property>
+        <property>
+        	<name>TELEPHONE</name>
+        	<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.9</high>
+        </property>
+        <property type="ignore">
+		    <name>GOVERNORATE_CODE</name>
+		</property>
+		<property type="ignore">
+		    <name>LOCALITY_NAME</name>
+		</property>
+		<property type="ignore">
+		    <name>LOCALITY_CODE</name>
+		</property>
+		<property type="ignore">
+		    <name>ID_ESTABLISHMENT</name>
+		</property>
+		<property type="ignore">
+		    <name>COMMERCIAL_NAME</name>
+		</property>
+		<property type="ignore">
+		    <name>NAME_OF_OWNER</name>
+		</property>
+		<property type="ignore">
+		    <name>SEX</name>
+		</property>
+		<property type="ignore">
+		    <name>QUARTER</name>
+		</property>
+		<property type="ignore">
+		    <name>STREET</name>
+		</property>
+		<property type="ignore">
+		    <name>BUILDING</name>
+		</property>
+		<property type="ignore">
+		    <name>OPERATIONAL_STATUS</name>
+		</property>
+		<property type="ignore">
+		    <name>CODE</name>
+		</property>
+		<property type="ignore">
+		    <name>ECONOMIC_ACTIVITY</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC5_DESCE</name>
+		</property>
+		<property type="ignore">
+		    <name>ESTABLISHMENT_OWNERSHIP</name>
+		</property>
+		<property type="ignore">
+		    <name>ECONOMIC_ORGANIZATION</name>
+		</property>
+		<property type="ignore">
+		    <name>LEGAL_STATUS</name>
+		</property>
+		<property type="ignore">
+		    <name>YEAR_OF_ESTABLISHMENT</name>
+		</property>
+		<property type="ignore">
+		    <name>PAID_WORKER_MALE</name>
+		</property>
+		<property type="ignore">
+		    <name>UN_PAID_WORKER_MALE</name>
+		</property>
+		<property type="ignore">
+		    <name>PAID_WORKER_FEMALE</name>
+		</property>
+		<property type="ignore">
+		    <name>UN_PAID_WORKER_FEMALE</name>
+		</property>
+		<property type="ignore">
+		    <name>TOTAL</name>
+		</property>
+		<property type="ignore">
+		    <name>BOOK_KEEPING</name>
+		</property>
+		<property type="ignore">
+		    <name>Q35</name>
+		</property>
+		<property type="ignore">
+		    <name>WORKER_LICENSED</name>
+		</property>
+		<property type="ignore">
+		    <name>Q38</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC_2</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC2_DISCA</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC2_DESCE</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC3</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC3_DISCA</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC3_DESCE</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC4</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC4_DESCA</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC4_DESCE</name>
+		</property>
+		<property type="ignore">
+		    <name>ISIC1</name>
+		</property>
+		<property type="ignore">
+		    <name>AREA</name>
+		</property>  
+    </schema>  
+
+	<group>
+		<csv>
+			<param name="input-file" value="src\test\resources\census-al-bireh.txt" separator="\t"/>
+			
+			<column name="Governorate code" property="GOVERNORATE_CODE"/>
+			<column name="Locality Name" property="LOCALITY_NAME"/>
+			<column name="Locality Code" property="LOCALITY_CODE"/>
+			<column name="ID NO. of Establishment" property="ID_ESTABLISHMENT"/>
+			<column name="Commercial Name" property="COMMERCIAL_NAME"/>
+			<column name="Name of owner or manager" property="NAME_OF_OWNER"/>
+			<column name="SEX" property="SEX"/>
+			<column name="Telephone" property="TELEPHONE" cleaner="fr.insee.pcbs.cleaners.PhoneCleaner"/>
+			<column name="Quarter" property="QUARTER"/>
+			<column name="Street" property="STREET"/>
+			<column name="Building" property="BUILDING"/>
+			<column name="operational status" property="OPERATIONAL_STATUS"/>
+			<column name="code" property="CODE"/>
+			<column name="Economic Activity description" property="ECONOMIC_ACTIVITY"/>
+			<column name="isic5_DescE" property="ISIC5_DESCE"/>
+			<column name="Establishment Ownership" property="ESTABLISHMENT_OWNERSHIP"/>
+			<column name="Economic organization" property="ECONOMIC_ORGANIZATION"/>
+			<column name="Legal Status" property="LEGAL_STATUS"/>
+			<column name="Year of Establishment" property="YEAR_OF_ESTABLISHMENT"/>
+			<column name="Paid worker male" property="PAID_WORKER_MALE"/>
+			<column name="Un paid worker male" property="UN_PAID_WORKER_MALE"/>
+			<column name="Paid worker Female" property="PAID_WORKER_FEMALE"/>
+			<column name="Un paid worker Female" property="UN_PAID_WORKER_FEMALE"/>
+			<column name="Total" property="TOTAL"/>
+			<column name="Establishment have book keeping" property="BOOK_KEEPING"/>
+			<column name="Q35" property="Q35"/>
+			<column name="No. worker licensed" property="WORKER_LICENSED"/>
+			<column name="Q38" property="Q38"/>
+			<column name="isic 2" property="ISIC_2"/>
+			<column name="isic2_discA" property="ISIC2_DISCA"/>
+			<column name="isic2_DescE" property="ISIC2_DESCE"/>
+			<column name="isic3" property="ISIC3"/>
+			<column name="isic3_discA" property="ISIC3_DISCA"/>
+			<column name="isic3_DescE" property="ISIC3_DESCE"/>
+			<column name="isic4" property="ISIC4"/>
+			<column name="isic4_DescA" property="ISIC4_DESCA"/>
+			<column name="isic4_DescE" property="ISIC4_DESCE"/>
+			<column name="isic1" property="ISIC1"/>
+			<column name="AREA" property="AREA"/>
+	    </csv>
+	</group>
+	<group>
+		<csv>
+			<param name="input-file" value="src\test\resources\al-bireh.txt" separator="\t"/>
+			
+			<column name="number" property="NUMBER"/>
+			<column name="Neighborhood / block" property="NEIGHBORHOOD_BLOCK"/>
+			<column name="parcel" property="PARCEL"/>
+			<column name="owner of the building" property="OWNER_BUILDING"/>
+			<column name="owner of establishment" property="OWNER_ESTABLISHMENT"/>
+			<column name="system number" property="SYSTEM_NUMBER"/>
+			<column name="Commercial Name" property="COMMERCIAL_NAME"/>
+			<column name="Operational status" property="OPERATIONAL_STATUS"/>
+			<column name="Telephone" property="TELEPHONE" cleaner="fr.insee.pcbs.cleaners.PhoneCleaner"/>
+	    </csv>
+	</group>
+
+</duke>

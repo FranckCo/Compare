@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+    <schema>
+        <threshold>0.80</threshold>
+        <maybe-threshold>0.70</maybe-threshold>
+        <path>lucene</path>
+
+        <property>
+            <name>ISIC_CODE</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.9</high>
+		</property> 
+        <property type="ignore">
+        	<name>ISIC_LABEL</name>
+        </property>
+    </schema>  
+
+	<csv>
+		<param name="input-file" value="src\test\resources\isic-4-5.txt" separator="\t"/>
+		
+		<column name="Code" property="ISIC_CODE"/>
+		<column name="Label" property="ISIC_LABEL"/>
+    </csv>
+
+</duke>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+    <schema>
+        <threshold>0.90</threshold>
+        <maybe-threshold>0.80</maybe-threshold>
+        <path>lucene</path>
+
+        <property type="ignore">
+        	<name>RELATED_ORGANIZATION_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+        </property>
+        <property>
+            <name>ORGANIZATION_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<high>0.9</high>
+		</property> 
+        <property type="ignore">
+        	<name>LEGAL_CLASEFICATION</name>
+        </property>
+        <property type="ignore">
+        	<name>PRIMARY_ECONOMIC_ACTIVITY</name>
+        </property>
+        <property>
+        	<name>PRIMARY_ECONOMIC_ACTIVITY_ID</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<high>0.3</high>
+        </property>
+        <property type="ignore">
+        	<name>DEGREE_LEVEL</name>
+        </property>
+        <property>
+        	<name>FILE_STATUS</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<high>0.2</high>
+        </property>
+        <property type="ignore">
+        	<name>SECTOR</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+        </property>
+        <property type="ignore">
+        	<name>MEMBER_SINCE</name>
+        </property>
+        <property>
+        	<name>TELEPHONE</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<high>0.8</high>
+        </property>
+		<property>
+        	<name>MOBILE</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<high>0.8</high>
+        </property>
+        <property type="ignore">
+        	<name>CITY_NAME</name>
+        </property>
+    </schema>  
+
+	<csv>
+		<param name="input-file" value="src\test\resources\coc.txt" separator="\t"/>
+		
+		<column name="RelatedOrganizationName" property="RELATED_ORGANIZATION_NAME"/>
+		<column name="OrganizationName" property="ORGANIZATION_NAME"/>
+		<column name="LegalClasefication" property="LEGAL_CLASEFICATION"/>
+		<column name="Primary Economic Activity" property="PRIMARY_ECONOMIC_ACTIVITY"/>
+		<column name="Primary Economic ActivityID" property="PRIMARY_ECONOMIC_ACTIVITY_ID"/>
+		<column name="Degree Level" property="DEGREE_LEVEL"/>
+		<column name="FileStatus" property="FILE_STATUS"/>
+		<column name="Sector" property="SECTOR"/>
+		<column name="Member Since" property="MEMBER_SINCE"/>
+		<column name="Telephone" property="TELEPHONE" cleaner="fr.insee.pcbs.cleaners.PhoneCleaner"/>
+		<column name="Mobile" property="MOBILE" cleaner="fr.insee.pcbs.cleaners.PhoneCleaner"/>
+		<column name="City Name" property="CITY_NAME"/>
+    </csv>
+
+</duke>

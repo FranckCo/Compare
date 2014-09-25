@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!--
+    RELAX-NG schema (compact syntax) for the Duke configuration file syntax.
+    Currently not being used for validation, but exists for documentation
+    purposes, if nothing else.
+  -->
+  <xs:element name="duke">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="object"/>
+        <xs:element ref="schema"/>
+        <xs:element minOccurs="0" ref="database"/>
+        <xs:choice>
+          <xs:sequence>
+            <xs:element ref="group"/>
+            <xs:element ref="group"/>
+          </xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="source"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="schema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="threshold"/>
+        <xs:element minOccurs="0" ref="maybe-threshold"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="property"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="threshold" type="xs:decimal"/>
+  <xs:element name="maybe-threshold" type="xs:decimal"/>
+  <xs:attributeGroup name="lookupattr">
+    <xs:attribute name="lookup" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="true"/>
+          <xs:enumeration value="false"/>
+          <xs:enumeration value="required"/>
+          <xs:enumeration value="default"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:group name="property">
+    <xs:choice>
+      <xs:group ref="idproperty"/>
+      <xs:group ref="ignoreproperty"/>
+      <xs:group ref="compareproperty"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="idproperty">
+    <xs:sequence>
+      <xs:element name="property">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="name">
+              <xs:attribute name="type" use="required">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="id"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="ignoreproperty">
+    <xs:sequence>
+      <xs:element name="property">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="name">
+              <xs:sequence>
+                <xs:element minOccurs="0" ref="comparator"/>
+                <xs:element minOccurs="0" ref="low"/>
+                <xs:element minOccurs="0" ref="high"/>
+              </xs:sequence>
+              <xs:attribute name="type" use="required">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="ignore"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+              <xs:attribute name="lookup">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                    <xs:enumeration value="required"/>
+                    <xs:enumeration value="default"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="compareproperty">
+    <xs:sequence>
+      <xs:element name="property">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="name">
+              <xs:sequence>
+                <xs:element minOccurs="0" ref="comparator"/>
+                <xs:element ref="low"/>
+                <xs:element ref="high"/>
+              </xs:sequence>
+              <xs:attribute name="type">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="compare"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+              <xs:attribute name="lookup">
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:enumeration value="true"/>
+                    <xs:enumeration value="false"/>
+                    <xs:enumeration value="required"/>
+                    <xs:enumeration value="default"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:attribute>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="name">
+    <xs:sequence>
+      <xs:element ref="name"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="comparator" type="xs:string"/>
+  <xs:element name="low" type="xs:decimal"/>
+  <xs:element name="high" type="xs:decimal"/>
+  <xs:element name="database">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+      </xs:sequence>
+      <xs:attribute name="class"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="source" abstract="true"/>
+  <xs:element name="ntriples" substitutionGroup="source">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element maxOccurs="unbounded" ref="column"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sparql" substitutionGroup="source">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element maxOccurs="unbounded" ref="column"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="csv" substitutionGroup="source">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element maxOccurs="unbounded" ref="column"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="jdbc" substitutionGroup="source">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element maxOccurs="unbounded" ref="column"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="data-source" substitutionGroup="source">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="column"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="classatt"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="param">
+    <xs:complexType>
+      <xs:attributeGroup ref="nameatt"/>
+      <xs:attribute name="value" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="nameatt">
+    <xs:attribute name="name" use="required"/>
+  </xs:attributeGroup>
+  <xs:element name="column">
+    <xs:complexType>
+      <xs:attributeGroup ref="nameatt"/>
+      <xs:attributeGroup ref="propertyatt"/>
+      <xs:attribute name="cleaner"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="propertyatt">
+    <xs:attribute name="property" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="cleaner">
+    <xs:attribute name="cleaner" use="required"/>
+  </xs:attributeGroup>
+  <xs:element name="group">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="source"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="object">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="param"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="classatt"/>
+      <xs:attributeGroup ref="nameatt"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="classatt">
+    <xs:attribute name="class" use="required"/>
+  </xs:attributeGroup>
+</xs:schema>

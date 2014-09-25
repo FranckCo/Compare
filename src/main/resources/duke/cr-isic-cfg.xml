@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+    <schema>
+        <threshold>0.85</threshold>
+        <maybe-threshold>0.75</maybe-threshold>
+        <path>lucene</path>
+
+        <property type="ignore">
+            <name>ISIC_CODE</name>
+		</property> 
+        <property type="ignore">
+            <name>COMPANY_NO</name>
+		</property> 
+        <property type="ignore">
+        	<name>COMPANY_NAME</name>
+        </property>
+        <property type="ignore">
+        	<name>CODE_COMPANY_TYPE</name>
+        </property>
+        <property type="ignore">
+        	<name>COMPANY_TYPE</name>
+        </property>
+        <property type="ignore">
+        	<name>DATE</name>
+        </property>
+        <property type="ignore">
+        	<name>CAPITAL</name>
+        </property>
+        <property type="ignore">
+        	<name>CODE_CURRENCY</name>
+        </property>
+        <property type="ignore">
+        	<name>CURRENCY</name>
+        </property>
+        <property type="ignore">
+        	<name>CITY_CODE</name>
+        </property>
+		<property type="ignore">
+        	<name>CITY</name>
+        </property>
+        <property type="ignore">
+        	<name>PLACE_OF_REGISTRATION</name>
+        </property>
+        <property>
+        	<name>ECONOMIC_ACTIVITY</name>
+			<comparator>no.priv.garshol.duke.comparators.Levenshtein</comparator>
+			<low>0.7</low>
+			<high>0.9</high>
+        </property>
+		<property type="ignore">
+        	<name>COMPANY_STATUS_CODE</name>
+        </property>
+        <property type="ignore">
+        	<name>COMPANY_STATUS</name>
+        </property>
+    </schema>
+
+	<group>
+		<csv>
+			<param name="input-file" value="src\test\resources\isic-4.txt" separator="\t"/>
+			
+			<column name="Code" property="ISIC_CODE"/>
+			<column name="Label" property="ECONOMIC_ACTIVITY"/>
+		</csv>
+	</group>
+
+	<group>
+		<csv>
+			<param name="input-file" value="src\test\resources\cr.txt" separator="\t"/>
+			
+			<column name=".Company No" property="COMPANY_NO"/> <!-- Careful: initial point in the column name -->
+			<column name="Company Name" property="COMPANY_NAME"/>
+			<column name="code of company type" property="CODE_COMPANY_TYPE"/>
+			<column name="company Type" property="COMPANY_TYPE"/>
+			<column name="Date" property="DATE"/>
+			<column name="Capital" property="CAPITAL"/>
+			<column name="code of Currency" property="CODE_CURRENCY"/>
+			<column name="Currency" property="CURRENCY"/>
+			<column name="city code" property="CITY_CODE"/>
+			<column name="city" property="CITY"/>
+			<column name="Place of registration" property="PLACE_OF_REGISTRATION"/>
+			<column name="Economic Activity" property="ECONOMIC_ACTIVITY"/>
+			<column name="company status code" property="COMPANY_STATUS_CODE"/>
+			<column name="company status" property="COMPANY_STATUS"/>
+	    </csv>
+	</group>
+</duke>
