@@ -31,7 +31,7 @@ public class ExcelExporter {
 
 	public static void main(String[] args) throws IOException {
 
-		ExcelExporter exporter = new ExcelExporter(Configuration.RAMALLAH, "src/test/resources/new-ramallah-name.txt");
+		ExcelExporter exporter = new ExcelExporter(Configuration.RAMALLAH, "src/main/resources/private/new-ramallah-name.txt");
 		exporter.exportColumns(2, 0, true, Arrays.asList(1, 3));
 		//ExcelExporter exporter = new ExcelExporter(Configuration.ISIC, "src/test/resources/isic-5.xml");
 		//exporter.exportISICSolr(5, 5);
