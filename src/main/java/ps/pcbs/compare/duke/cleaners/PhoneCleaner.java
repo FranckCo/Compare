@@ -5,41 +5,97 @@ import java.util.regex.Pattern;
 
 import no.priv.garshol.duke.Cleaner;
 
-/*
-- number = 024xxxxx ==> number = 0224xxxxx  (not specified by PCBS)
-- number = 029xxxxx ==> number = 0229xxxxx
-- number = 24xxxxx ==> number = 0224xxxxx  (not specified by PCBS)
-- number = 29xxxxx ==> number = 0229xxxxx
-- number = 224xxxxx ==> number = 0224xxxxx  (not specified by PCBS)
-- number = 229xxxxx ==> number = 0229xxxxx
-- number = 522xxxxxx ==> number = 0522xxxxxx  (not specified by PCBS)
-- number = 562xxxxxx ==> number = 0562xxxxxx
-- number = 568xxxxxx ==> number = 0568xxxxxx
-- number = 569xxxxxx ==> number = 0569xxxxxx
-- number = 592xxxxxx ==> number = 0592xxxxxx
-- number = 595xxxxxx ==> number = 0595xxxxxx
-- number = 597xxxxxx ==> number = 0597xxxxxx
-- number = 598xxxxxx ==> number = 0598xxxxxx
-- number = 599xxxxxx ==> number = 0599xxxxxx
-*/
+/**
+ * Constructs a Phone Number <code>Cleaner</code>. Implements the specification
+ * supplied by CT.
+ * 
+ * @author Java/CNIO
+ *
+ */
 public class PhoneCleaner implements Cleaner {
 
-	Pattern pattern = Pattern.compile("5(22|62|68|69|92|95|97|98|99)[0-9]{6}|22(4|9)[0-9]{5}");
+	Pattern pattern = Pattern
+			.compile("5(22|62|68|69|92|95|97|98|99)[0-9]{6}|22(4|9)[0-9]{5}");
 
 	@Override
 	public String clean(String value) {
 
-		String trimmed = value.trim();
-
+		String trimmed = value.trim().replaceAll(" ", "")
+				.replaceAll("\\p{InArabic}+", "");
 		Matcher matcher = pattern.matcher(trimmed);
-		if (matcher.matches()) return "0" + trimmed;
 
-		if (trimmed.length() == 8) {
-			if (value.startsWith("024")) return "0224" + trimmed.substring(3);
-			if (value.startsWith("029")) return "0229" + trimmed.substring(3);
+		if (matcher.matches())
+			return "0" + trimmed.substring(0);
+
+		if (trimmed.matches("(23|24|26|27|28|29)[0-9]{5}")) {
+			if (value.startsWith("23") | value.startsWith("27")
+					| value.startsWith("29")) {
+				return "02" + trimmed;
+			}
+			if (value.startsWith("24"))
+				return "04" + trimmed;
+			if (value.startsWith("26"))
+				return "09" + trimmed;
+			if (value.startsWith("28"))
+				return "08" + trimmed;
+
 		}
-		else if (trimmed.matches("(24|29)[0-9]{5}")) return "02" + trimmed;
+		if (trimmed.matches("29[0-9]{5}[^0-9]"))
+			return "02"
+					+ trimmed.replace("/", "").replace(".", "")
+							.replace("*", "").replace("-", "");
+
+		if (trimmed.matches("(23|24|27|29)[0-9]{5}[^0-9][0-9]")) {
+
+			if (value.startsWith("24")) {
+				return "04" + trimmed.substring(0, 7);
+			}
+
+			else {
+				return "02" + trimmed.substring(0, 7);
+			}
+
+		}
+
+		if (trimmed.matches("29[0-9]{5}[^0-9][0-9][^0-9][0-9]"))
+			return "02" + trimmed.substring(0, 7);
+
+		if (trimmed.matches("(22|25|27)[0-9]{5}[^0-9](24|27)[0-9]{5}")) {
+			return "02" + trimmed.substring(0, 7);
+		}
+		if (trimmed.matches("29[0-9]{5}[^0-9](059)[0-9]{7}")) {
+			return "02" + trimmed.substring(0, 7);
+		}
+
+		if (trimmed.matches("29[0-9]{5}[^0-9]29[0-9]{5}"))
+			return "02" + trimmed.substring(0, 7);
+
+		if (trimmed.matches("[^0-9]29[0-9]{5}29[0-9]{5}"))
+			return "02" + trimmed.substring(1, 8);
+
+		if (trimmed.matches("(1599|1544)[0-9]{6}"))
+			return "0" + trimmed.substring(1);
+
+		if (trimmed.matches("(02)[^0-9][0-9]{7}"))
+			return "02" + trimmed.substring(2).replace("-", "");
+
+		if (trimmed.matches("(0599)[^0-9][0-9]{6}"))
+			return "05" + trimmed.substring(2).replace("-", "");
+
+		if (trimmed.matches("(05990599)[0-9]{6}"))
+			return trimmed.substring(4);
+
+		if (trimmed.matches("[0-9]{10}[^0-9]"))
+			return trimmed.replace("/", "").replace(".", "").replace("*", "")
+					.replace("-", "");
+		;
+
+		if (trimmed.length() == 11) {
+			if (value.startsWith("05*"))
+				return "05" + trimmed.substring(3);
+		}
 
 		return trimmed;
+
 	}
 }

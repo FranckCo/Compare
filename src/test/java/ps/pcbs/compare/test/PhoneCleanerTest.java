@@ -2,6 +2,8 @@ package ps.pcbs.compare.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import ps.pcbs.compare.duke.cleaners.PhoneCleaner;
@@ -12,20 +14,85 @@ public class PhoneCleanerTest {
 
 	@Test
 	public void testClean() {
-		assertEquals("022412345", cleaner.clean("2412345"));
-		assertEquals("022967367", cleaner.clean("2967367"));
-		assertEquals("022412345", cleaner.clean("02412345"));
-		assertEquals("022967367", cleaner.clean("02967367"));
-		assertEquals("022412345", cleaner.clean("22412345"));
-		assertEquals("022967367", cleaner.clean("22967367"));
 
-		assertEquals("0522654321", cleaner.clean("522654321"));
-		assertEquals("0562654321", cleaner.clean("562654321"));
-		assertEquals("0568654321", cleaner.clean("568654321"));
-		assertEquals("0569654321", cleaner.clean("569654321"));
-		assertEquals("0592654321", cleaner.clean("592654321"));
-		assertEquals("0595654321", cleaner.clean("595654321"));
-		assertEquals("0597654321", cleaner.clean("597654321"));
+		// Spec1
+		assertEquals("0512345678", cleaner.clean("05*12345678"));
+		assertEquals("0522345678", cleaner.clean("522345678"));
+		// Spec 2
+		assertEquals("022312345", cleaner.clean("2312345"));
+		assertEquals("022767891", cleaner.clean("2767891"));
+		assertEquals("022923456", cleaner.clean("2923456"));
+		assertEquals("042412345", cleaner.clean("2412345"));
+		assertEquals("092612345", cleaner.clean("2612345"));
+		assertEquals("082812345", cleaner.clean("2812345"));
+		// spec3
+		assertEquals("022922345", cleaner.clean("2922345."));
+		assertEquals("022922345", cleaner.clean("2922345/"));
+		assertEquals("022922345", cleaner.clean("2922345-"));
+
+		// spec4
+		assertEquals("022722345", cleaner.clean("2722345/5"));
+		assertEquals("042467891", cleaner.clean("2467891/0"));
+
+		// spec5
+		assertEquals("022922345", cleaner.clean("2922345-5-6"));
+
+		// spec6
+		assertEquals("022212345", cleaner.clean("2212345-2412345"));
+		assertEquals("022512345", cleaner.clean("2512345+2412345"));
+
+		// spec7
+		assertEquals("022912345", cleaner.clean("2912345-0591234567"));
+
+		// spec8
+		assertEquals("022912345", cleaner.clean("2912345-2967891"));
+
+		// spec9
+		assertEquals("022912345", cleaner.clean("-2912345  2967891"));
+
+		// spec10
+		assertEquals("0599123456", cleaner.clean("1599123456"));
+		assertEquals("0544123456", cleaner.clean("1544123456"));
+
+		// spec11
+		assertEquals("0597111400", cleaner.clean("0597111400محمد"));
+		//spec12
+//		assertEquals("0229845432", cleaner.clean("2ع2984543"));
+		
+		//spec13
+		assertEquals("022987441", cleaner.clean("2987441/المحل"));
+		
+		//spec14
+		assertEquals("0599316494", cleaner.clean("0599316494عبد لناصر"));
+		
+		//spec15
+		assertEquals("0591234567", cleaner.clean("0591234567سامر"));
+		
+		//spec17
+		assertEquals("022987441",cleaner.clean("2987441/المحل"));
+		
+		//spec18
+		assertEquals("022912345",cleaner.clean("02-2912345"));
+		
+		//spec19
+		assertEquals("0599291234",cleaner.clean("0599-291234"));
+		
+		//spec19
+		assertEquals("0599123456",cleaner.clean("05990599123456"));
+		
+		//spec20
+		assertEquals("0599521218",cleaner.clean("0599521218/نديم"));
+		
+		//spec20
+		assertEquals("022912345",cleaner.clean("2912345/البيت"));
+		
+		//spec21
+		assertEquals("0599316494",cleaner.clean("0599316494عبد لناصر"));
+		
+		//spec22
+		assertEquals("0591234567", cleaner.clean("0591234567سامر"));
+		
+		
 	}
 
 }
