@@ -1,14 +1,16 @@
 package ps.pcbs.compare.duke.runners;
 
+import org.apache.log4j.Logger;
+
 import no.priv.garshol.duke.ConfigLoader;
 import no.priv.garshol.duke.Configuration;
 import no.priv.garshol.duke.Processor;
+import no.priv.garshol.duke.matchers.PrintMatchListener;
+import ps.pcbs.compare.Config;
 import ps.pcbs.compare.duke.listeners.FileMatchListener;
+import ps.pcbs.compare.duke.listeners.FileProcessListener;
 
 public class LinkageRunner {
-
-	public static String DEFAULT_CONFIGURATION_FILE_PATH = "src/main/resources/ramallah-census-tel-cfg.xml";
-	// TODO Use a Configuration object
 
 	public LinkageRunner() {
 		// TODO Auto-generated constructor stub
@@ -16,13 +18,33 @@ public class LinkageRunner {
 
 	public static void main(String[] argv) throws Exception {
 
-		//String configFilePath = (argv[0] == null ? DEFAULT_CONFIGURATION_FILE_PATH : argv[0]);
+		// String configFilePath = (argv[0] == null ?
+		// DEFAULT_CONFIGURATION_FILE_PATH : argv[0]);
 
-		Configuration configuration = ConfigLoader.load(DEFAULT_CONFIGURATION_FILE_PATH);
+		Configuration configuration = ConfigLoader.load(Config.CONFIGLINK);
 		Processor processor = new Processor(configuration);
-		FileMatchListener listener = new FileMatchListener("src/test/resources/ramallah-census-tel-matches.xml", DEFAULT_CONFIGURATION_FILE_PATH, false, false, true, true);
+		// FileMatchListener listener = new FileMatchListener(Config.BILAN,
+		// Config.CONFIGLINK, true, false, true, true);
+		FileProcessListener listener = new FileProcessListener(Config.BILAN,
+				Config.CONFIGLINK, true, false, true, true);
+		PrintMatchListener listenerConsole = new PrintMatchListener(false,
+				false, true, true, configuration.getProperties(), true);
 		processor.addMatchListener(listener);
-		processor.link();
+		processor.addMatchListener(listenerConsole);
+		
+		if (Config.MATCHALL.equals("true")) {
+			logger.info("matching only one record from file 2 per record from file 1: ");
+			processor.link(configuration.getDataSources(1),
+					configuration.getDataSources(2), true, 49999);
+		} else {
+			logger.info("matching multiple records from file 2 per record from file 1: ");
+			processor.link(configuration.getDataSources(1),
+					configuration.getDataSources(2), false, 49999);
+		}
+		// processor.link();
 		processor.close();
 	}
+	
+	
+	private static final Logger logger = Logger.getLogger(LinkageRunner.class);
 }
