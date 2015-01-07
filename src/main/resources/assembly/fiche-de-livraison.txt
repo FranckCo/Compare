@@ -1,0 +1,20 @@
+****************************
+**   Fiche de livraison   **
+****************************
+
+Projet Github :     Compare
+Application :       Batch pour le matching de fichiers
+Date de livraison : 15/12/2014
+Version :           1.0.0
+
+Contenu du livrable :
+*********************
+- Compare-bin.zip contenant :
+		- répertoire bin : Scripts de lancement des batchs (fichier .cmd encapsulant l’appel à la JVM avec le paramétrage du Classpath)
+		- répertoire lib : Archives .jar de l’application et  les librairies dépendantes.
+		- répertoire etc : Fichier de configuration de production (à surcharger): 
+- Compare.txt   		: Cette fiche de livraison
+
+Modifications apportées :
+*************************
+- Mise en place de la livraison via maven assembly
