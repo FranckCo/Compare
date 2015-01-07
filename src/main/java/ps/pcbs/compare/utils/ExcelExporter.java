@@ -14,13 +14,15 @@ import java.util.List;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import ps.pcbs.compare.Configuration;
+import ps.pcbs.compare.Config;
 
 /**
  * Utility class containing different methods for exporting Excel data to CSV files.
@@ -30,17 +32,29 @@ import ps.pcbs.compare.Configuration;
 public class ExcelExporter {
 
 	public static void main(String[] args) throws IOException {
+		
+		File directory = new File(Config.XLS);
 
-		ExcelExporter exporter = new ExcelExporter(Configuration.RAMALLAH, "src/main/resources/private/new-ramallah-name.txt");
-		exporter.exportColumns(2, 0, true, Arrays.asList(1, 3));
+		File[] fList = directory.listFiles();
+		System.out.println(fList.length);
+		for (File file : fList){
+			if (file.isFile() && file.getName().endsWith("xls")){
+				ExcelExporter exporter = new ExcelExporter(file.getAbsolutePath(), file.getAbsolutePath().replaceAll("xls", "csv"));
+				exporter.exportColumns(0, 0, true, Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30));
+		}
+		}
+
+		
 		//ExcelExporter exporter = new ExcelExporter(Configuration.ISIC, "src/test/resources/isic-5.xml");
 		//exporter.exportISICSolr(5, 5);
+//		ExcelExporter exporter0 = new ExcelExporter(Config.CENSUS, Config.CENSUS.replace("xls", "csv"));
+//		exporter0.exportColumns(0, 0, true, Arrays.asList(0,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
 	}
 
 	private String bookPath = null;
 	private String csvPath = null;
-	private String separator = Configuration.DEFAULT_SEPARATOR;
-	private String delimiter = Configuration.DEFAULT_DELIMITER;
+	private String separator = Config.DEFAULT_SEPARATOR;
+	private String delimiter = Config.DEFAULT_DELIMITER;
 
 	private int maxLines = 0;
 
@@ -168,11 +182,11 @@ public class ExcelExporter {
 
 		logger.debug("Trying to open Excel file " + bookPath);
 
-		XSSFSheet data = null;
+		HSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
 			FileInputStream inputStream = new FileInputStream(new File(bookPath));
-			XSSFWorkbook wb = new XSSFWorkbook(inputStream);
+			HSSFWorkbook wb = new HSSFWorkbook(inputStream);
 			data = wb.getSheetAt(sheetIndex);
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
