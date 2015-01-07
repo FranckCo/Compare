@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+	<schema>
+		<threshold>0.80</threshold>
+		<maybe-threshold>0.70</maybe-threshold>
+		<path>lucene</path>
+
+		<property type="ignore">
+			<name>CODE</name>
+		</property>
+		<!-- <property type="ignore"> -->
+		<!-- <name>DEALER_NUMBER</name> -->
+		<!-- </property> -->
+		<property type="ignore">
+			<name>COMMERCIAL_NAME</name>
+		</property>
+		<property>
+			<name>TELEPHONE</name>
+			<comparator>ps.pcbs.compare.duke.comparators.PhoneComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+		<property type="ignore">
+			<name>DEALER_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.PersonNameComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+
+		<!-- <property type="ignore"> -->
+		<!-- <name>TELEPHONE_1</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>BASIN</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>NEIGHBORHOOD</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>PLOT</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ACTIVITY</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>LICENSE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>WORKS_YESNO</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>GOVERNORATE_CODE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>LOCALITY_NAME</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>LOCALITY_CODE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ID_ESTABLISHMENT</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>COMMERCIAL_NAME</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>NAME_OF_OWNER</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>SEX</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>QUARTER</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>STREET</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>BUILDING</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>OPERATIONAL_STATUS</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>CODE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ECONOMIC_ACTIVITY</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ISIC5_DESCE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ESTABLISHMENT_OWNERSHIP</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>ECONOMIC_ORGANIZATION</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>LEGAL_STATUS</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>YEAR_OF_ESTABLISHMENT</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>PAID_WORKER_MALE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>UN_PAID_WORKER_MALE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>PAID_WORKER_FEMALE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>UN_PAID_WORKER_FEMALE</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>TOTAL</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>BOOK_KEEPING</name> -->
+		<!-- </property> -->
+		<!-- <property type="ignore"> -->
+		<!-- <name>Q35</name> -->
+		<!-- </property> -->
+		<property type="ignore">
+			<name>WORKER_LICENSED</name>
+		</property>
+		<!-- <property type="ignore"> -->
+		<!-- <name>Q38</name> -->
+		<!-- </property> -->
+
+	</schema>
+
+	<group>
+		<csv>
+			<param name="input-file" value="D:/Compare/files/csv/Census2012_Ramallah_Albireh.csv"
+				separator="\t" />
+
+			<!-- <column name="Governorate code" property="GOVERNORATE_CODE"/> -->
+			<!-- <column name="Locality Name" property="LOCALITY_NAME"/> -->
+			<column name="Q13" property="CODE" />
+			<!-- <column name="Q13" property="ID_ESTABLISHMENT" /> -->
+			<column name="Q16" property="COMMERCIAL_NAME" />
+			<column name="Q17" property="DEALER_NAME" />
+			<!-- <column name="Q18" property="SEX" /> -->
+			<column name="Q19" property="TELEPHONE"	cleaner="ps.pcbs.compare.duke.cleaners.PhoneCleaner"  />
+			<!-- <column name="Quarter" property="QUARTER" /> -->
+			<!-- <column name="Street" property="STREET" /> -->
+			<!-- <column name="Building" property="BUILDING" /> -->
+			<!-- <column name="operational status" property="OPERATIONAL_STATUS" /> -->
+			<!-- <column name="code" property="CODE" /> -->
+			<!-- <column name="Economic Activity description" property="ECONOMIC_ACTIVITY" 
+				/> -->
+			<!-- <column name="isic5_DescE" property="ISIC5_DESCE" /> -->
+			<!-- <column name="Establishment Ownership" property="ESTABLISHMENT_OWNERSHIP" 
+				/> -->
+			<!-- <column name="Economic organization" property="ECONOMIC_ORGANIZATION" 
+				/> -->
+			<!-- <column name="Legal Status" property="LEGAL_STATUS" /> -->
+			<!-- <column name="Year of Establishment" property="YEAR_OF_ESTABLISHMENT" 
+				/> -->
+			<!-- <column name="Paid worker male" property="PAID_WORKER_MALE" /> -->
+			<!-- <column name="Un paid worker male" property="UN_PAID_WORKER_MALE" 
+				/> -->
+			<!-- <column name="Paid worker Female" property="PAID_WORKER_FEMALE" /> -->
+			<!-- <column name="Un paid worker Female" property="UN_PAID_WORKER_FEMALE" 
+				/> -->
+			<!-- <column name="Total" property="TOTAL" /> -->
+			<!-- <column name="Establishment have book keeping" property="BOOK_KEEPING" 
+				/> -->
+			<!-- <column name="Q35" property="Q35" /> -->
+			<column name="Q36" property="WORKER_LICENSED" />
+			<!-- <column name="Q38" property="Q38" /> -->
+		</csv>
+	</group>
+	<group>
+		<csv>
+			<param name="input-file" value="D:/Compare/files/csv/MunicipalityofRamallah.csv"
+				separator="\t" />
+
+			<column name="Z01" property="CODE" />
+			<column name="Z02" property="DEALER_NAME" />
+			<column name="Z03" property="COMMERCIAL_NAME" />
+			<column name="Z04" property="TELEPHONE" cleaner="ps.pcbs.compare.duke.cleaners.PhoneCleaner"/>
+			<!-- <COLUMN NAME="Z05" PROPERTY="TELEPHONE" -->
+			<!-- CLEANER="ps.pcbs.compare.duke.cleaners.PhoneCleaner" /> -->
+			<!-- <column name="BASIN" property="BASIN" /> -->
+			<!-- <column name="Neighborhood" property="NEIGHBORHOOD" /> -->
+			<!-- <column name="PLOT " property="PLOT" /> Careful: trailing space in 
+				the column name -->
+			<!-- <column name="Activity" property="ACTIVITY" /> -->
+			<!-- <column name="License" property="LICENSE" /> -->
+			<column name="Z13" property="WORKER_LICENSED"></column>
+			<!-- <column name="Works - does not work" property="WORKS_YESNO" /> -->
+		</csv>
+	</group>
+
+</duke>
