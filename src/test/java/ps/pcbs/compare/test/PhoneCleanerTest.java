@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import ps.pcbs.compare.Config;
 import ps.pcbs.compare.duke.cleaners.PhoneCleaner;
 
 public class PhoneCleanerTest {
@@ -25,6 +26,7 @@ public class PhoneCleanerTest {
 		assertEquals("042412345", cleaner.clean("2412345"));
 		assertEquals("092612345", cleaner.clean("2612345"));
 		assertEquals("082812345", cleaner.clean("2812345"));
+		assertEquals("022959357", cleaner.clean("2959357"));
 		// spec3
 		assertEquals("022922345", cleaner.clean("2922345."));
 		assertEquals("022922345", cleaner.clean("2922345/"));
@@ -92,6 +94,23 @@ public class PhoneCleanerTest {
 		//spec22
 		assertEquals("0591234567", cleaner.clean("0591234567سامر"));
 		
+		assertEquals("022952220", cleaner.clean("2952220+2954193"));
+		
+//		String s="0599521218يم /نديم د256";
+//		String s1="0599521218/";
+//		s=s.replaceAll("\\p{InArabic}+","");
+//		System.out.println(s);
+//		s=s.replace("/",Config.DEFAULT_TOKEN_SEPARATOR);
+//		s1=s1.replace("/",Config.DEFAULT_TOKEN_SEPARATOR);
+//		System.out.println(s);
+//		System.out.println(s1);
+//		String s3="12345-5-6-8-9";
+//		s3=s3.replaceAll("\\s+", " ")
+//		.replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+//		.replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+//		.replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+//		.replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+//		System.out.println(s3);
 		
 	}
 
