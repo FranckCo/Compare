@@ -25,30 +25,45 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ps.pcbs.compare.Config;
 
 /**
- * Utility class containing different methods for exporting Excel data to CSV files.
+ * Utility class containing different methods for exporting Excel data to CSV
+ * files.
  * 
  * @author Franck Cotton
  */
 public class ExcelExporter {
 
 	public static void main(String[] args) throws IOException {
-		
+
 		File directory = new File(Config.XLS);
 
 		File[] fList = directory.listFiles();
 		System.out.println(fList.length);
-		for (File file : fList){
-			if (file.isFile() && file.getName().endsWith("xls")){
-				ExcelExporter exporter = new ExcelExporter(file.getAbsolutePath(), file.getAbsolutePath().replaceAll("xls", "csv"));
-				exporter.exportColumns(0, 0, true, Arrays.asList(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30));
-		}
+		for (File file : fList) {
+			if (file.isFile() && file.getName().endsWith("xls")) {
+				ExcelExporter exporter = new ExcelExporter(
+						file.getAbsolutePath(), file.getAbsolutePath()
+								.replaceAll("xls", "csv"));
+				if (file.getName().toLowerCase().startsWith("municipality")) {
+					exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2,
+							3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+							17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+							30), Arrays.asList(3, 4));
+				} else {
+					exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2,
+							3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+							17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+							30), null);
+				}
+			}
 		}
 
-		
-		//ExcelExporter exporter = new ExcelExporter(Configuration.ISIC, "src/test/resources/isic-5.xml");
-		//exporter.exportISICSolr(5, 5);
-//		ExcelExporter exporter0 = new ExcelExporter(Config.CENSUS, Config.CENSUS.replace("xls", "csv"));
-//		exporter0.exportColumns(0, 0, true, Arrays.asList(0,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
+		// ExcelExporter exporter = new ExcelExporter(Configuration.ISIC,
+		// "src/test/resources/isic-5.xml");
+		// exporter.exportISICSolr(5, 5);
+		// ExcelExporter exporter0 = new ExcelExporter(Config.CENSUS,
+		// Config.CENSUS.replace("xls", "csv"));
+		// exporter0.exportColumns(0, 0, true,
+		// Arrays.asList(0,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
 	}
 
 	private String bookPath = null;
@@ -64,44 +79,64 @@ public class ExcelExporter {
 	private static final Logger logger = Logger.getLogger(ExcelExporter.class);
 
 	/**
-	 * Constructs an instance of <code>ExcelExporter</code> with given paths for input and output.
+	 * Constructs an instance of <code>ExcelExporter</code> with given paths for
+	 * input and output.
 	 * 
-	 * @param excelFilePath Path to the Excel spreadsheet from which to export.
-	 * @param textFilePath Path to the text file where data will be written.
+	 * @param excelFilePath
+	 *            Path to the Excel spreadsheet from which to export.
+	 * @param textFilePath
+	 *            Path to the text file where data will be written.
 	 */
 	private ExcelExporter(String excelFilePath, String textFilePath) {
 
-		if ((excelFilePath == null) || (excelFilePath.length() == 0)) throw new IllegalArgumentException("Excel file path must be provided");
-		if ((textFilePath == null) || (textFilePath.length() == 0)) throw new IllegalArgumentException("Output file path must be provided");
+		if ((excelFilePath == null) || (excelFilePath.length() == 0))
+			throw new IllegalArgumentException(
+					"Excel file path must be provided");
+		if ((textFilePath == null) || (textFilePath.length() == 0))
+			throw new IllegalArgumentException(
+					"Output file path must be provided");
 
 		bookPath = excelFilePath;
 		csvPath = textFilePath;
 	}
 
 	/**
-	 * Reads the Excel file and exports it to the CSV file, optionally adding line numbers and/or hashes.
+	 * Reads the Excel file and exports it to the CSV file, optionally adding
+	 * line numbers and/or hashes.
 	 * 
-	 * @param sheetIndex Zero-based index of the sheet containing the data.
-	 * @param firstLineIndex Zero-based index of the first line to read in the sheet.
-	 * @param title Indicates if the first line to read contains the column names.
-	 * @param lineNumbers If true, the line numbers will be added in the CSV files.
-	 * @param hash If true, a SHA-1 hash of the records will be added in the CSV files.
+	 * @param sheetIndex
+	 *            Zero-based index of the sheet containing the data.
+	 * @param firstLineIndex
+	 *            Zero-based index of the first line to read in the sheet.
+	 * @param title
+	 *            Indicates if the first line to read contains the column names.
+	 * @param lineNumbers
+	 *            If true, the line numbers will be added in the CSV files.
+	 * @param hash
+	 *            If true, a SHA-1 hash of the records will be added in the CSV
+	 *            files.
 	 */
-	void export(int sheetIndex, int firstLineIndex, boolean title, boolean lineNumbers, boolean hash) {
+	void export(int sheetIndex, int firstLineIndex, boolean title,
+			boolean lineNumbers, boolean hash) {
 
 		logger.debug("Trying to open Excel file " + bookPath);
 
 		XSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
-			FileInputStream inputStream = new FileInputStream(new File(bookPath));
+			FileInputStream inputStream = new FileInputStream(
+					new File(bookPath));
 			XSSFWorkbook wb = new XSSFWorkbook(inputStream);
 			data = wb.getSheetAt(sheetIndex);
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
 			return;
 		} finally {
-			if (sourceFile != null) try {sourceFile.close();} catch(Exception ignored) {}
+			if (sourceFile != null)
+				try {
+					sourceFile.close();
+				} catch (Exception ignored) {
+				}
 		}
 
 		// Opening output file
@@ -116,21 +151,30 @@ public class ExcelExporter {
 
 		MessageDigest digester = DigestUtils.getSha1Digest();
 		DataFormatter formatter = new DataFormatter();
-		Iterator<Row> rows = data.rowIterator ();
+		Iterator<Row> rows = data.rowIterator();
 
 		// Skip first lines if necessary
-		if (firstLineIndex > 0) while (rows.hasNext() && rows.next().getRowNum() < firstLineIndex - 1);
+		if (firstLineIndex > 0)
+			while (rows.hasNext()
+					&& rows.next().getRowNum() < firstLineIndex - 1)
+				;
 
 		// If first line is titles, write column names
 		if (title && rows.hasNext()) {
 			Row titles = rows.next();
-			if (lineNumbers) outStream.print(delimiter + "Line number" + delimiter + separator);
-			if (hash) outStream.print(delimiter + "Record hash" + delimiter + separator);
+			if (lineNumbers)
+				outStream.print(delimiter + "Line number" + delimiter
+						+ separator);
+			if (hash)
+				outStream.print(delimiter + "Record hash" + delimiter
+						+ separator);
 			Iterator<Cell> cells = titles.cellIterator();
 			StringBuilder builder = new StringBuilder();
 			while (cells.hasNext()) {
-				String cellValue = formatter.formatCellValue(cells.next()).replaceAll("\\s+", " ").trim();
-				builder.append(delimiter).append(cellValue).append(delimiter).append(separator);
+				String cellValue = formatter.formatCellValue(cells.next())
+						.replaceAll("\\s+", " ").trim();
+				builder.append(delimiter).append(cellValue).append(delimiter)
+						.append(separator);
 			}
 			// Delete last separator
 			builder.deleteCharAt(builder.length() - 1);
@@ -144,26 +188,36 @@ public class ExcelExporter {
 
 			Iterator<Cell> cells = row.cellIterator();
 			StringBuilder builder = new StringBuilder();
-			
+
 			// We can insert a filter here
-			//if (!formatter.formatCellValue(row.getCell(2)).equals("301810")) continue;
+			// if (!formatter.formatCellValue(row.getCell(2)).equals("301810"))
+			// continue;
 
 			while (cells.hasNext()) {
 				Cell cell = cells.next();
-				String cellValue = formatter.formatCellValue(cell).replaceAll("\\s+", " ");
-				builder.append(delimiter).append(cellValue).append(delimiter).append(separator);
-				if (hash) digester.update(cellValue.getBytes());
+				String cellValue = formatter.formatCellValue(cell).replaceAll(
+						"\\s+", " ");
+				builder.append(delimiter).append(cellValue).append(delimiter)
+						.append(separator);
+				if (hash)
+					digester.update(cellValue.getBytes());
 			}
 			// Delete last separator
 			builder.deleteCharAt(builder.length() - 1);
-			if (rowNumber > 1) outStream.println();
+			if (rowNumber > 1)
+				outStream.println();
 
-			if (lineNumbers) outStream.print(delimiter + rowNumber + delimiter + separator);
-			if (hash) outStream.print(delimiter + Hex.encodeHexString(digester.digest()) + delimiter + separator);
+			if (lineNumbers)
+				outStream.print(delimiter + rowNumber + delimiter + separator);
+			if (hash)
+				outStream.print(delimiter
+						+ Hex.encodeHexString(digester.digest()) + delimiter
+						+ separator);
 			outStream.print(builder);
 
 			// For test purposes
-			if (rowNumber == maxLines) break;
+			if (rowNumber == maxLines)
+				break;
 			rowNumber++;
 		}
 		logger.debug("Closing output file, " + rowNumber + " lines written");
@@ -173,26 +227,37 @@ public class ExcelExporter {
 	/**
 	 * Reads the Excel file and exports selected columns to the CSV file.
 	 * 
-	 * @param sheetIndex Zero-based index of the sheet containing the data.
-	 * @param firstLineIndex Zero-based index of the first line to read in the sheet.
-	 * @param title Indicates if the first line to read contains the column names.
-	 * @param columnIndexes A list of integers giving the (zero-based) indexes of the columns to export.
+	 * @param sheetIndex
+	 *            Zero-based index of the sheet containing the data.
+	 * @param firstLineIndex
+	 *            Zero-based index of the first line to read in the sheet.
+	 * @param title
+	 *            Indicates if the first line to read contains the column names.
+	 * @param columnIndexes
+	 *            A list of integers giving the (zero-based) indexes of the
+	 *            columns to export.
 	 */
-	void exportColumns(int sheetIndex, int firstLineIndex, boolean title, List<Integer> columnIndexes) {
+	void exportColumns(int sheetIndex, int firstLineIndex, boolean title,
+			List<Integer> columnIndexes, List<Integer> Phonescolumn) {
 
 		logger.debug("Trying to open Excel file " + bookPath);
 
 		HSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
-			FileInputStream inputStream = new FileInputStream(new File(bookPath));
+			FileInputStream inputStream = new FileInputStream(
+					new File(bookPath));
 			HSSFWorkbook wb = new HSSFWorkbook(inputStream);
 			data = wb.getSheetAt(sheetIndex);
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
 			return;
 		} finally {
-			if (sourceFile != null) try {sourceFile.close();} catch(Exception ignored) {}
+			if (sourceFile != null)
+				try {
+					sourceFile.close();
+				} catch (Exception ignored) {
+				}
 		}
 
 		// Opening output file
@@ -206,10 +271,13 @@ public class ExcelExporter {
 		logger.debug("Beginning to read sheet " + data.getSheetName());
 
 		DataFormatter formatter = new DataFormatter();
-		Iterator<Row> rows = data.rowIterator ();
+		Iterator<Row> rows = data.rowIterator();
 
 		// Skip first lines if necessary
-		if (firstLineIndex > 0) while (rows.hasNext() && rows.next().getRowNum() < firstLineIndex - 1);
+		if (firstLineIndex > 0)
+			while (rows.hasNext()
+					&& rows.next().getRowNum() < firstLineIndex - 1)
+				;
 
 		// If first line is titles, write column names
 		if (title && rows.hasNext()) {
@@ -219,12 +287,25 @@ public class ExcelExporter {
 			while (cells.hasNext()) {
 				Cell cell = cells.next();
 				if (columnIndexes.contains(cell.getColumnIndex())) {
-					String cellValue = formatter.formatCellValue(cell).replaceAll("\\s+", " ").trim();
-					builder.append(delimiter).append(cellValue).append(delimiter).append(separator);
+
+					String cellValue = formatter.formatCellValue(cell)
+							.replaceAll("\\s+", " ").trim();
+					builder.append(delimiter).append(cellValue)
+							.append(delimiter).append(separator);
+
 				}
+
+			}
+			if (Phonescolumn != null && !Phonescolumn.isEmpty()) {
+
+				String cellValue = "Phone";
+				builder.append(delimiter).append(cellValue).append(delimiter)
+						.append(separator);
+
 			}
 			// Delete last separator
-			if (builder.length() > 0) builder.deleteCharAt(builder.length() - separator.length());
+			if (builder.length() > 0)
+				builder.deleteCharAt(builder.length() - separator.length());
 			outStream.println(builder);
 		}
 
@@ -234,25 +315,67 @@ public class ExcelExporter {
 			Row row = rows.next();
 			Iterator<Cell> cells = row.cellIterator();
 			StringBuilder builder = new StringBuilder();
-			
+			StringBuilder Phonebuilder = new StringBuilder();
 			// We can insert a filter here
-			//if (!formatter.formatCellValue(row.getCell(2)).equals("301810")) continue;
-
+			// if (!formatter.formatCellValue(row.getCell(2)).equals("301810"))
+			// continue;
+			int j = 0;
 			while (cells.hasNext()) {
 				Cell cell = cells.next();
+
+				if (Phonescolumn != null
+						&& Phonescolumn.contains(cell.getColumnIndex())) {
+					if (cell != null
+							&& !formatter.formatCellValue(cell).equals("")) {
+						if (j == 0)
+							Phonebuilder.append(delimiter);
+						if (j > 0)
+							Phonebuilder.append(Config.DEFAULT_TOKEN_SEPARATOR);
+
+						String cellValue = formatter.formatCellValue(cell)
+								.replaceAll("\\s+", " ")
+								.replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+								.replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+								.replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+								.replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+						;
+						Phonebuilder.append(cellValue);
+						j++;
+						if (j == Phonescolumn.size())
+							Phonebuilder.append(delimiter).append(separator);
+					}
+
+				}
 				if (columnIndexes.contains(cell.getColumnIndex())) {
-					String cellValue = formatter.formatCellValue(cell).replaceAll("\\s+", " ");
-					builder.append(delimiter).append(cellValue).append(delimiter).append(separator);
+					String cellValue = formatter.formatCellValue(cell)
+							.replaceAll("\\s+", " ")
+							.replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+							.replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+							.replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+							.replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+					;
+					builder.append(delimiter).append(cellValue)
+							.append(delimiter).append(separator);
+
 				}
 			}
+			if (Phonebuilder.length() > 0) {
+				if (!Phonebuilder.substring(Phonebuilder.length() - 1).equals(
+						separator))
+					Phonebuilder.append(delimiter).append(separator);
+			}
+			builder.append(Phonebuilder);
 			// Delete last separator
-			if (builder.length() > 0) builder.deleteCharAt(builder.length() - separator.length());
-			if (rowNumber > 1) outStream.println();
+			if (builder.length() > 0)
+				builder.deleteCharAt(builder.length() - separator.length());
+			if (rowNumber > 1)
+				outStream.println();
 
 			outStream.print(builder);
 
 			// For test purposes
-			if (rowNumber == maxLines) break;
+			if (rowNumber == maxLines)
+				break;
 			rowNumber++;
 		}
 		logger.debug("Closing output file, " + rowNumber + " lines written");
@@ -260,10 +383,15 @@ public class ExcelExporter {
 	}
 
 	/**
-	 * Specialized method for exporting the ISIC from the Excel file published on zinnar.ps.
+	 * Specialized method for exporting the ISIC from the Excel file published
+	 * on zinnar.ps.
 	 * 
-	 * @param minLength Minimum code length for which the information will be exported.
-	 * @param maxLength Maximum code length for which the information will be exported.
+	 * @param minLength
+	 *            Minimum code length for which the information will be
+	 *            exported.
+	 * @param maxLength
+	 *            Maximum code length for which the information will be
+	 *            exported.
 	 */
 	void exportISIC(int minLength, int maxLength) {
 
@@ -272,14 +400,20 @@ public class ExcelExporter {
 		XSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
-			FileInputStream inputStream = new FileInputStream(new File(bookPath));
+			FileInputStream inputStream = new FileInputStream(
+					new File(bookPath));
 			XSSFWorkbook wb = new XSSFWorkbook(inputStream);
-			data = wb.getSheetAt(0); // For this spreadsheet, data is on the first sheet
+			data = wb.getSheetAt(0); // For this spreadsheet, data is on the
+										// first sheet
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
 			return;
 		} finally {
-			if (sourceFile != null) try {sourceFile.close();} catch(Exception ignored) {}
+			if (sourceFile != null)
+				try {
+					sourceFile.close();
+				} catch (Exception ignored) {
+				}
 		}
 
 		// Opening output file
@@ -291,28 +425,37 @@ public class ExcelExporter {
 		}
 
 		logger.debug("Beginning to read sheet " + data.getSheetName());
-		logger.debug("Selecting items with code length between " + minLength + " and " + maxLength);
+		logger.debug("Selecting items with code length between " + minLength
+				+ " and " + maxLength);
 
 		DataFormatter formatter = new DataFormatter();
-		Iterator<Row> rows = data.rowIterator ();
+		Iterator<Row> rows = data.rowIterator();
 
 		// Skip the first lines which contains column names
-		if (rows.hasNext()) rows.next();
-		outStream.println(delimiter + "Code" + delimiter + separator + delimiter + "Label" + delimiter);
+		if (rows.hasNext())
+			rows.next();
+		outStream.println(delimiter + "Code" + delimiter + separator
+				+ delimiter + "Label" + delimiter);
 
 		int rowNumber = 1;
 		while (rows.hasNext()) {
 
 			Row row = rows.next();
 
-			String codeValue = formatter.formatCellValue(row.getCell(0)).replaceAll("\\s+", " ").trim();
-			if ((codeValue.length() < minLength) || (codeValue.length() > maxLength)) continue;
+			String codeValue = formatter.formatCellValue(row.getCell(0))
+					.replaceAll("\\s+", " ").trim();
+			if ((codeValue.length() < minLength)
+					|| (codeValue.length() > maxLength))
+				continue;
 
-			String labelValue = formatter.formatCellValue(row.getCell(1)).trim();
-			outStream.println(delimiter + codeValue + delimiter + separator + delimiter + labelValue + delimiter);
+			String labelValue = formatter.formatCellValue(row.getCell(1))
+					.trim();
+			outStream.println(delimiter + codeValue + delimiter + separator
+					+ delimiter + labelValue + delimiter);
 
 			// For test purposes
-			if (rowNumber == maxLines) break;
+			if (rowNumber == maxLines)
+				break;
 			rowNumber++;
 		}
 		logger.debug("Closing output file, " + rowNumber + " lines written");
@@ -320,11 +463,16 @@ public class ExcelExporter {
 	}
 
 	/**
-	 * Specialized method for exporting the ISIC from the Excel file published on zinnar.ps to a XML document ready to load in Solr.
+	 * Specialized method for exporting the ISIC from the Excel file published
+	 * on zinnar.ps to a XML document ready to load in Solr.
 	 * 
-	 * @param minLength Minimum code length for which the information will be exported.
-	 * @param maxLength Maximum code length for which the information will be exported.
-	 * @throws IOException 
+	 * @param minLength
+	 *            Minimum code length for which the information will be
+	 *            exported.
+	 * @param maxLength
+	 *            Maximum code length for which the information will be
+	 *            exported.
+	 * @throws IOException
 	 */
 	void exportISICSolr(int minLength, int maxLength) throws IOException {
 
@@ -333,14 +481,20 @@ public class ExcelExporter {
 		XSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
-			FileInputStream inputStream = new FileInputStream(new File(bookPath));
+			FileInputStream inputStream = new FileInputStream(
+					new File(bookPath));
 			XSSFWorkbook wb = new XSSFWorkbook(inputStream);
-			data = wb.getSheetAt(0); // For this spreadsheet, data is on the first sheet
+			data = wb.getSheetAt(0); // For this spreadsheet, data is on the
+										// first sheet
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
 			return;
 		} finally {
-			if (sourceFile != null) try {sourceFile.close();} catch(Exception ignored) {}
+			if (sourceFile != null)
+				try {
+					sourceFile.close();
+				} catch (Exception ignored) {
+				}
 		}
 
 		// Opening output file
@@ -352,13 +506,15 @@ public class ExcelExporter {
 		}
 
 		logger.debug("Beginning to read sheet " + data.getSheetName());
-		logger.debug("Selecting items with code length between " + minLength + " and " + maxLength);
+		logger.debug("Selecting items with code length between " + minLength
+				+ " and " + maxLength);
 
 		DataFormatter formatter = new DataFormatter();
-		Iterator<Row> rows = data.rowIterator ();
+		Iterator<Row> rows = data.rowIterator();
 
 		// Skip the first lines which contains column names
-		if (rows.hasNext()) rows.next();
+		if (rows.hasNext())
+			rows.next();
 		outStream.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		outStream.println("<add>");
 
@@ -367,13 +523,19 @@ public class ExcelExporter {
 
 			Row row = rows.next();
 
-			String codeValue = formatter.formatCellValue(row.getCell(0)).replaceAll("\\s+", " ").trim();
-			if ((codeValue.length() < minLength) || (codeValue.length() > maxLength)) continue;
+			String codeValue = formatter.formatCellValue(row.getCell(0))
+					.replaceAll("\\s+", " ").trim();
+			if ((codeValue.length() < minLength)
+					|| (codeValue.length() > maxLength))
+				continue;
 
-			String labelValue = formatter.formatCellValue(row.getCell(1)).trim();
+			String labelValue = formatter.formatCellValue(row.getCell(1))
+					.trim();
 			outStream.println("\t<doc>");
-			outStream.println("\t\t<field name=\"id\">" + codeValue + "</field>");
-			outStream.println("\t\t<field name=\"name\">" + labelValue + "</field>");
+			outStream.println("\t\t<field name=\"id\">" + codeValue
+					+ "</field>");
+			outStream.println("\t\t<field name=\"name\">" + labelValue
+					+ "</field>");
 			outStream.println("\t</doc>");
 
 			rowNumber++;
