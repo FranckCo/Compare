@@ -86,5 +86,5 @@ public class Config {
 
 	public static String DEFAULT_SEPARATOR = "\t";
 	public static String DEFAULT_DELIMITER = "\"";
-	public static String DEFAULT_TOKEN_SEPARATOR = "|";
+	public static String DEFAULT_TOKEN_SEPARATOR = "#";
 }
