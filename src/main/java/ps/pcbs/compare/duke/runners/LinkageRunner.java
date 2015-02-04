@@ -33,13 +33,13 @@ public class LinkageRunner {
 		processor.addMatchListener(listenerConsole);
 		
 		if (Config.MATCHALL.equals("true")) {
-			logger.info("matching only one record from file 2 per record from file 1: ");
+			logger.info("matching multiple records from file 2 per record from file 1: ");
 			processor.link(configuration.getDataSources(1),
 					configuration.getDataSources(2), true, 49999);
 		} else {
-			logger.info("matching multiple records from file 2 per record from file 1: ");
+			logger.info("matching only one record from file 2 per record from file 1: ");
 			processor.link(configuration.getDataSources(1),
-					configuration.getDataSources(2), false, 49999);
+					configuration.getDataSources(2), false, 100000);
 		}
 		// processor.link();
 		processor.close();
