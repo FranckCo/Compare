@@ -11,6 +11,7 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 
 	private String separator = Config.DEFAULT_TOKEN_SEPARATOR;
 	private Comparator comparator = null;
+	private String baseComparator = null;
 
 	public GenericMultiComparator() {
 		super();
@@ -42,7 +43,7 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 
 		for (String first : list1) {
 			for (String second : list2) {
-				score = this.comparator.compare(first, second);
+				score = this.getComparator().compare(first, second);
 				if (score > 0.0) return score;
 			}
 		}
@@ -53,10 +54,38 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 	public void setComparator(Comparator comparator) {
 		this.comparator = comparator;
 	}
+	
+	public Comparator getComparator() {
+		try {
+			Class<?> comparatorClass = Class.forName(this.baseComparator);
+			this.comparator = (Comparator) comparatorClass.newInstance();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Invalid class name "
+					+ comparator);
+		}
+		return comparator;
+	}
+
 
 	public void setComparator(String comparatorClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
 		Class<?> comparatorClass = Class.forName(comparatorClassName);
 		this.comparator = (Comparator) comparatorClass.newInstance();
+	}
+	
+	public String getSeparator() {
+		return separator;
+	}
+
+	public void setSeparator(String separator) {
+		this.separator = separator;
+	}
+
+	public String getBaseComparator() {
+		return baseComparator;
+	}
+
+	public void setBaseComparator(String baseComparator) {
+		this.baseComparator = baseComparator;
 	}
 }
