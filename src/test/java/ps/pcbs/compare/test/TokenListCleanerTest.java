@@ -15,13 +15,15 @@ public class TokenListCleanerTest {
 	@Test
 	public void testClean() {
 
-		Cleaner cleaner = new TokenListCleaner(Arrays.asList("bali", "balo"));
-		assertEquals(cleaner.clean(" bali toto balo "), "toto");
+		TokenListCleaner cleaner = new TokenListCleaner();
+		cleaner.setToken("ه,رام الله,مكتب,شركة,دكتور,شركه,ة");
+		System.out.print(cleaner.getToken());
+		assertEquals("برستيج للاستثمار السياحي باسل",cleaner.clean("شركة برستيج للاستثمار السياحي باسل"));
+		
+		assertEquals(cleaner.clean("المركز الفني للصيانه"),cleaner.clean("المركز الفي للصيانة"));
 
-		cleaner = new TokenListCleaner(Arrays.asList("حي", "حوض", "حى"));
-		assertEquals("13", cleaner.clean("حوض 13"));
-
-		cleaner = new TokenListCleaner(Arrays.asList("Chapi", "Chapo"));
-		assertEquals("Patapo,   Patapi", cleaner.clean("Chapi Chapo Patapo, Chapo Chapi Patapi"));
+		assertEquals("13", cleaner.clean("13دكتور"));
+//		cleaner = new TokenListCleaner(Arrays.asList("Chapi", "Chapo"));
+//		assertEquals("Patapo,   Patapi", cleaner.clean("Chapi Chapo Patapo, Chapo Chapi Patapi"));
 	}
 }
