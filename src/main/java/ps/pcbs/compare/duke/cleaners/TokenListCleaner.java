@@ -1,7 +1,7 @@
 package ps.pcbs.compare.duke.cleaners;
 
-import java.util.ArrayList;
-import java.util.Collections;
+
+import java.util.Arrays;
 import java.util.List;
 
 import no.priv.garshol.duke.Cleaner;
@@ -13,21 +13,43 @@ import no.priv.garshol.duke.Cleaner;
  * @author Franck Cotton
  */
 public class TokenListCleaner implements Cleaner {
-
+	
+	private String token=null;
 	private List<String> toDelete = null;
-
+	
+	public TokenListCleaner(){
+		super();
+	}
+	
+	
 	public TokenListCleaner(List<String> toDelete) {
-
+		super();
 		// Safer to make a copy
-		this.toDelete = new ArrayList<String>(toDelete.size());
-		Collections.copy(this.toDelete, toDelete); // TODO Fix that, does not work
+//		this.toDelete = new ArrayList<String>(toDelete.size());
+//		Collections.copy(this.toDelete, toDelete); // TODO Fix that, does not work
 	}
 
 	@Override
 	public String clean(String value) {
 
-		for (String token : toDelete) value = value.replace(token, "");
+		for (String token : this.getToDelete()) value = value.replace(token, "");
 
 		return value.trim();
+	}
+
+	public List<String> getToDelete() {
+		return Arrays.asList(this.token.split(","));
+	}
+
+	public void setToDelete(List<String> toDelete) {
+		this.toDelete = toDelete;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
