@@ -35,12 +35,29 @@ public class DoubleWordCountComparator implements Comparator {
 		// TODO Secure limit cases
 
 		if ((v1 == null) || (v2 == null)) return (v1 == v2 ? 1.0 : 0.0); // TODO Validate this
-
+		
 		String[] sequence1 = v1.split(separator);
 		String[] sequence2 = v2.split(separator);
-
-		// TODO Validate metrics
+		
+				if(sequence1.length>1 && sequence2.length>1)
 		return (firstComparator.compare(sequence1[0], sequence2[0]) + secondComparator.compare(sequence1[1], sequence2[1])) / 2;
+		else return 0;
 
+	}
+
+	public WordCountComparator getFirstComparator() {
+		return firstComparator;
+	}
+
+	public void setFirstComparator(WordCountComparator firstComparator) {
+		this.firstComparator = firstComparator;
+	}
+
+	public WordCountComparator getSecondComparator() {
+		return secondComparator;
+	}
+
+	public void setSecondComparator(WordCountComparator secondComparator) {
+		this.secondComparator = secondComparator;
 	}
 }
