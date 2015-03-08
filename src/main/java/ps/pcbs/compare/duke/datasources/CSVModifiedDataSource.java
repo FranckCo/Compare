@@ -1,6 +1,7 @@
 package ps.pcbs.compare.duke.datasources;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -26,12 +27,12 @@ import no.priv.garshol.duke.DukeConfigException;
 import no.priv.garshol.duke.datasources.*;
 import no.priv.garshol.duke.utils.CSVReader;
 
-
 /**
  * @author Karreem
  * 
- * Modified CSVDataSource from Duke in order to be able to compare n-tuple of columns
- * The operator used to concatenate variables is "#" separator
+ *         Modified CSVDataSource from Duke in order to be able to compare
+ *         n-tuple of columns The operator used to concatenate variables is "#"
+ *         separator
  * 
  *
  */
@@ -128,11 +129,12 @@ public class CSVModifiedDataSource extends ColumnarDataSource {
 	public class CSVRecordIterator extends RecordIterator {
 		private CSVReader reader;
 		/**
-		 * modified from int to Map of Integer in order to be able to deal
-		 * with concatenation of colums. The operator to add columns is #
+		 * modified from int to Map of Integer in order to be able to deal with
+		 * concatenation of colums. The operator to add columns is #
 		 */
-		private Map<Integer, List<Integer>> index; // what index in row to find colum[ix]
-										
+		private Map<Integer, List<Integer>> index; // what index in row to find
+													// colum[ix]
+
 		private Column[] column; // all the columns, in random order
 		private RecordBuilder builder;
 		private Record nextrecord;
@@ -144,10 +146,8 @@ public class CSVModifiedDataSource extends ColumnarDataSource {
 			// index here is random 0-n. index[0] gives the column no in the CSV
 			// file, while colname[0] gives the corresponding column name.
 
-			index = new HashMap<>();
+			index = new LinkedHashMap<>();
 			column = new Column[columns.size()];
-			
-
 
 			// skip the required number of lines before getting to the data
 			for (int ix = 0; ix < skiplines; ix++)
@@ -171,50 +171,56 @@ public class CSVModifiedDataSource extends ColumnarDataSource {
 
 			// build the 'index' and 'column' indexes
 			int count = 0;
-			
-			
 
 			int nb;
 			for (Column c : getColumns()) {
-
+				Map<String, Integer> ColumnId = new LinkedHashMap();
 				List<String> names = null;
 				// we split the column names according to the "#" separator
 				if (c.getName().contains(Config.DEFAULT_TOKEN_SEPARATOR)) {
-// local variable used to determine if we deal with a variable which is obtained by concatenating 2 variables 
-
+					// local variable used to determine if we deal with a
+					// variable which is obtained by concatenating 2 variables
 					names = new ArrayList<String>(Arrays.asList(c.getName()
 							.split(Config.DEFAULT_TOKEN_SEPARATOR)));
-
+					// needed to keep the columns order
+					for (String colname : names) {
+						ColumnId.put(colname, null);
+					}
 				}
-				// local variable used to determine if we success to find the variable in the csv file 
+
+				// local variable used to determine if we success to find the
+				// variable in the csv file
 				boolean found = false;
-				nb=0;
-				// local variable used to determine which variable of the csv file use to fulfill the column
-				List<Integer> i=new ArrayList<Integer>();
+				nb = 0;
+				// local variable used to determine which variable of the csv
+				// file use to fulfill the column
+				List<Integer> i = new ArrayList<Integer>();
 				for (int ix = 0; ix < header.length; ix++) {
-					
+
 					if ((names == null) || names.isEmpty()) {
 						if (header[ix].equals(c.getName())) {
 							i.add(ix);
-							index.put(count,i);
+							index.put(count, i);
 							column[count++] = c;
 							found = true;
 							break;
 						}
 					} else {
-						// case of a variable which is obtained by concatenating 2 variables
+						// case of a variable which is obtained by concatenating
+						// 2 variables
 						for (String colname : names) {
-
 							if (header[ix].equals(colname)) {
-								i.add(ix);
+								ColumnId.put(colname, ix);
+								// i.add(ix);
 								nb++;
-
 							}
 						}
-						// once we have found variables in the csv file we save the indexes in the map
+						// once we have found variables in the csv file we save
+						// the indexes in the map
 						if (nb == names.size()) {
 							found = true;
-							index.put(count,i);
+							i.addAll(ColumnId.values());
+							index.put(count, i);
 							column[count++] = c;
 							break;
 						}
@@ -224,7 +230,6 @@ public class CSVModifiedDataSource extends ColumnarDataSource {
 					throw new DukeConfigException("Column " + c.getName()
 							+ " not found " + "in CSV file");
 			}
-			
 
 			findNextRecord();
 		}
@@ -245,31 +250,27 @@ public class CSVModifiedDataSource extends ColumnarDataSource {
 			// build a record from the current row
 			builder.newRecord();
 
-
-
-				
 			String rowValue;
-				for (Entry<Integer, List<Integer>> entry : index.entrySet()) {
+			for (Entry<Integer, List<Integer>> entry : index.entrySet()) {
 
-					int j=0;
-					StringBuilder rows = new StringBuilder();
+				int j = 0;
+				StringBuilder rows = new StringBuilder();
 
-					
-					for (int i:entry.getValue()){
-						if (i >= row.length)
-							continue; // order is arbitrary, so we might not be done yet
-						rowValue = row[i]
-								.replaceAll("\\s+", " ").trim();
-						rows.append(rowValue);
-						if(entry.getValue().size()>1 && j<entry.getValue().size()-1){
-							rows.append(Config.DEFAULT_TOKEN_SEPARATOR);
-							j++;
-						}
+				for (int i : entry.getValue()) {
+					if (i >= row.length)
+						continue; // order is arbitrary, so we might not be done
+									// yet
+					rowValue = row[i].replaceAll("\\s+", " ").trim();
+					rows.append(rowValue);
+					if (entry.getValue().size() > 1
+							&& j < entry.getValue().size() - 1) {
+						rows.append(Config.DEFAULT_TOKEN_SEPARATOR);
+						j++;
 					}
-					builder.addValue(column[entry.getKey()], rows.toString());
 				}
-				
-			
+				builder.addValue(column[entry.getKey()], rows.toString());
+			}
+
 			nextrecord = builder.getRecord();
 		}
 
