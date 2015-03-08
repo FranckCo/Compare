@@ -4,7 +4,7 @@ import no.priv.garshol.duke.Comparator;
 
 public class SuffixComparator implements Comparator {
 
-	private int suffixLength = 0;
+	private int suffixLength = 10;
 
 	public SuffixComparator() {
 		super();
@@ -26,7 +26,6 @@ public class SuffixComparator implements Comparator {
 	public double compare(String v1, String v2) {
 
 		if ((v1 == null) || (v2 == null)) return (v1 == v2 ? 1.0 : 0.0);
-
 		int start = v2.length() - suffixLength;
 
 		if (start < 0) return (v1.equals(v2) ? 1.0 : 0.0);
