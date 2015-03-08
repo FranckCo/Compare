@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+
+	<object class="ps.pcbs.compare.duke.cleaners.MultiCleaner" name="PhoneCleaner">
+		<param name="baseCleaner" value="ps.pcbs.compare.duke.cleaners.PhoneCleaner" />
+		<param name="separator" value="#" />
+	</object>
+
+	<object class="ps.pcbs.compare.duke.comparators.GenericMultiComparator"
+		name="multi-phone-comp">
+		<param name="baseComparator" value="ps.pcbs.compare.duke.comparators.SuffixComparator" />
+		<param name="separator" value="#" />
+	</object>
+
+	<object class="ps.pcbs.compare.duke.cleaners.TokenListCleaner"
+		name="TokenCleaner">
+		<param name="token" value="رام ,مكتب,شركة,دكتور,شركه,شراكة,شراكه,الشركة,الشركه,واخوانه,وإخوانه,واولاده,وأولاده,محلات,محل" />
+		<param name="complex" value="true"/>
+	</object>
+	
+	
+
+	<object class="ps.pcbs.compare.duke.comparators.WordCountComparator"
+		name="word-comp1">
+		<param name="threshold" value="4" />
+	</object>
+	
+	<object class="ps.pcbs.compare.duke.comparators.WordCountComparator"
+		name="word-comp2">
+		<param name="threshold" value="4" />
+	</object>
+	
+	<object class="ps.pcbs.compare.duke.comparators.DoubleWordCountComparator"
+		name="multi-word-comp">
+		<param name="firstComparator" value="word-comp1" />
+		<param name="secondComparator" value="word-comp2" />
+	</object>
+
+		<object class="ps.pcbs.compare.duke.cleaners.MultiCleaner"
+		name="com-own-cleaner">
+		<param name="baseCleaner" value="ps.pcbs.compare.duke.cleaners.TokenListCleaner" />
+		<param name="separator" value="#" />
+	</object>
+
+	<schema>
+		<threshold>0.80</threshold>
+		<maybe-threshold>0.70</maybe-threshold>
+		<path>lucene</path>
+
+		<property type="ignore">
+			<name>COMMERCIAL_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+		
+		<property type="ignore">
+			<name>DEALER_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+		
+		<property type="ignore">
+			<name>COMMERCIALOWNER_NAME</name>
+			<comparator>ps.pcbs.compare.duke.comparators.CommercialOwnerNameComparator</comparator>
+			<low>0.50</low>
+			<high>0.90</high>
+		</property>
+		<property>
+			<name>TELEPHONE</name>
+			<comparator>multi-phone-comp</comparator>
+			<low>0.50</low>
+			<high>0.90</high>
+		</property>
+		<property  type="ignore">
+			<name>ADRESS</name>
+		</property>
+		<property  type="ignore">
+			<name>ACTIVITY</name>
+		</property>
+
+	</schema>
+		<group>
+		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
+			<param name="input-file"
+				value="D:/rpmrbx/Mes Documents/Compare/files/csv/MunicipalityofRamallah.csv"
+				separator="\t" />
+
+<!-- 			<column name="Z01" property="CODE" /> -->
+			<column name="Z02" property="DEALER_NAME" label="Municipality_DealerName"/>
+			<column name="Z03" property="COMMERCIAL_NAME" label="Municipality_CommercialName"/>
+			<column name="Z03#Z02" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="Municipality_CommercialOwnerName"/>
+			<column name="Z04#Z05" property="TELEPHONE" cleaner="PhoneCleaner" label="Municipality_Telephone"/>
+			<column name="Z13" property="ADRESS" label="Municipality_Adress"/>
+			<column name="Z10" property="ACTIVITY" label="Municipality_Activity"/>
+		</data-source>
+	</group>
+
+	<group>
+		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
+			<param name="input-file"
+				value="D:/rpmrbx/Mes Documents/Compare/files/csv/Census2012_Ramallah_Albireh.csv"
+				separator="\t" />
+<!-- 			<column name="Q13" property="CODE" /> -->
+			<column name="Q17" property="DEALER_NAME" label="Census_DealerName"/>
+			<column name="Q16" property="COMMERCIAL_NAME" label="Census_CommercialName"/>
+			<column name="Q16#Q17" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="Census_CommercialOwnerName"/>
+	
+			<column name="Q19" property="TELEPHONE" cleaner="PhoneCleaner" label="Census_Telephone"/>
+			<column name="Q20#Q21" property="ADRESS" label="Census_Adress"/>
+			<column name="Q24" property="ACTIVITY" label="Census_Activity" />
+		</data-source>
+	</group>
+
+
+</duke>

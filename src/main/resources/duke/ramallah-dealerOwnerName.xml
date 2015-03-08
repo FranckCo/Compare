@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<duke>
+
+
+	<schema>
+		<threshold>0.80</threshold>
+		<maybe-threshold>0.70</maybe-threshold>
+		<path>lucene</path>
+
+		<property type="ignore">
+			<name>COMMERCIAL_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+		
+		<property type="ignore">
+			<name>DEALER_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.47</low>
+			<high>0.90</high>
+		</property>
+		
+		<property>
+			<name>COMMERCIALOWNER_NAME</name>
+			<comparator>no.priv.garshol.duke.comparators.ExactComparator</comparator>
+			<low>0.50</low>
+			<high>0.90</high>
+		</property>
+		<property  type="ignore">
+			<name>TELEPHONE</name>
+		</property>
+		<property  type="ignore">
+			<name>ADRESS</name>
+		</property>
+		<property  type="ignore">
+			<name>ACTIVITY</name>
+		</property>
+
+	</schema>
+
+	<group>
+		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
+			<param name="input-file"
+				value="C:/Users/Karim/Desktop/Outputs 25022015/Commercial+OwnerName/ramallah-census-commercialownerName-PCBScomparator-completeCleaner-uniqueMatch.txt"
+				separator="\t" />
+
+			<column name="DEALER_NAME" property="DEALER_NAME"/>
+			<column name="COMMERCIAL_NAME" property="COMMERCIAL_NAME"/>
+			<column name="COMMERCIALOWNER_NAME" property="COMMERCIALOWNER_NAME"/>
+			<column name="TELEPHONE" property="TELEPHONE"/>
+			<column name="ADRESS" property="ADRESS"/>
+			<column name="ACTIVITY" property="ACTIVITY" />
+		</data-source>
+	</group>
+	<group>
+		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
+			<param name="input-file"
+				value="C:/Users/Karim/Desktop/Outputs 25022015/Commercial+OwnerName/ramallah-census-commercialownerName-PCBScomparator-cleanerKeyWords-uniqueMatch.txt"
+				separator="\t" />
+
+<!-- 			<column name="Z01" property="CODE" /> -->
+			<column name="DEALER_NAME" property="DEALER_NAME"/>
+			<column name="COMMERCIAL_NAME" property="COMMERCIAL_NAME"/>
+			<column name="COMMERCIALOWNER_NAME" property="COMMERCIALOWNER_NAME"/>
+			<column name="TELEPHONE" property="TELEPHONE"/>
+			<column name="ADRESS" property="ADRESS"/>
+			<column name="ACTIVITY" property="ACTIVITY" />
+		</data-source>
+	</group>
+
+</duke>
