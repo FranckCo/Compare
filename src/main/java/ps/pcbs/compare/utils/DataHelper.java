@@ -25,8 +25,9 @@ public class DataHelper {
 
 	public static void main(String[] args) throws IOException {
 
-		DataHelper helper = new DataHelper(Configuration.AL_BIREH);
-		helper.count(0, 2, true, 1,  ps.pcbs.compare.duke.cleaners.LeadingAlphaCleaner.class);
+		DataHelper helper = new DataHelper(Configuration.CENSUS);
+		helper.countTokens(0, 2, true, 8, null);
+		//helper.count(0, 2, true, 1,  ps.pcbs.compare.duke.cleaners.LeadingAlphaCleaner.class);
 		//helper.checkCodification(0, 0, true, 12, 13);
 		//helper.countNullOrVoid(0, 0, true, 7);
 		//helper.countEqual(0, 0, true, 6, 9);
@@ -54,6 +55,7 @@ public class DataHelper {
 	 * @param firstLineIndex Zero-based index of the first line to read in the sheet.
 	 * @param title Indicates if the first line to read contains the column names.
 	 * @param columnIndex Zero-based index of the column containing the values to count.
+	 * @param cleanerClass Cleaner A cleaner to apply to the column values.
 	 */
 	void count(int sheetIndex, int firstLineIndex, boolean title, int columnIndex, Class<? extends Cleaner> cleanerClass) {
 
@@ -106,6 +108,74 @@ public class DataHelper {
 		for (String value : counter.keySet()) {
 			System.out.println(value + "\t" + counter.get(value));
 			logger.info("Value: " + value + "\t\t\tCount: " + counter.get(value));
+		}
+		System.out.println("Number of lines: " + (rowNumber - 1));
+	}
+
+	/**
+	 * Counts the frequencies of the text tokens in the (string) values of a column.
+	 * 
+	 * @param sheetIndex Zero-based index of the sheet containing the data.
+	 * @param firstLineIndex Zero-based index of the first line to read in the sheet.
+	 * @param title Indicates if the first line to read contains the column names.
+	 * @param columnIndex Zero-based index of the column containing the values to count.
+	 * @param cleanerClass Cleaner A cleaner to apply to the column values.
+	 */
+	void countTokens(int sheetIndex, int firstLineIndex, boolean title, int columnIndex, Class<? extends Cleaner> cleanerClass) {
+
+		logger.debug("Trying to open Excel file " + bookPath);
+
+		// Add a cleaner here
+		Cleaner cleaner = null;
+		try {
+			cleaner = cleanerClass.newInstance();
+		} catch (Exception ignored) {} // An NPE will occur later
+
+		XSSFSheet data = null;
+		InputStream sourceFile = null;
+		try {
+			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(new File(bookPath)));
+			data = wb.getSheetAt(sheetIndex);
+		} catch (Exception e) {
+			logger.fatal("Error opening Excel file: " + e.getMessage());
+			return;
+		} finally {
+			if (sourceFile != null) try {sourceFile.close();} catch(Exception ignored) {}
+		}
+
+		Map<String, Integer> counter = new HashMap<String, Integer>();
+
+		logger.debug("Beginning to read sheet " + data.getSheetName());
+
+		Iterator<Row> rows = data.rowIterator ();
+		DataFormatter formatter = new DataFormatter();
+
+		// Skip first lines if necessary
+		if (firstLineIndex > 0) while (rows.hasNext() && rows.next().getRowNum() < firstLineIndex - 1);
+
+		// If first line is titles, get the column name
+		String variableName;
+		if (title && rows.hasNext()) variableName = formatter.formatCellValue(rows.next().getCell(columnIndex));
+		else variableName = "Column " + columnIndex;
+
+		int rowNumber = 1;
+		while (rows.hasNext()) {
+			String value = formatter.formatCellValue((rows.next().getCell(columnIndex)));
+			if (cleaner != null) value = cleaner.clean(value);
+			String[] tokens = value.split("\\s+");
+			for (String token : tokens) {
+				if (counter.containsKey(token)) counter.put(token, counter.get(token) + 1);
+				else counter.put(token, 1);				
+			}
+			rowNumber++;
+			if (rowNumber % 1000 == 0) System.out.println("Last line read " + rowNumber);
+		}
+		// Report
+		System.out.println(variableName);
+		logger.info("Value counts for variable " + variableName);
+		for (String value : counter.keySet()) {
+			System.out.println(value + "\t" + counter.get(value));
+			//logger.info("Value: " + value + "\t\t\tCount: " + counter.get(value));
 		}
 		System.out.println("Number of lines: " + (rowNumber - 1));
 	}
