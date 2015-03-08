@@ -139,6 +139,7 @@ public class FileMatchListener implements MatchListener {
 		logger.debug("Starting to process the matching events");
 		if (xmlOutput) {
 			printStream.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			printStream.println("<?xml-stylesheet href=\"transfo.xsl\" type=\"text/xsl\"?>");
 			printStream.print("<MatchingResults>");
 		} else {
 			printStream.print(delimiter + "TYPE_MATCH" + delimiter + separator + delimiter + "CONFIDENCE" + delimiter);
@@ -209,7 +210,7 @@ public class FileMatchListener implements MatchListener {
 			Element groupTag = (Element) groupTags.item(index);
 			NodeList columns = groupTag.getElementsByTagName("column");
 			for (int columnIndex = 0; columnIndex < columns.getLength(); columnIndex++) {
-				propertyNames.get(index + 1).add(((Element) columns.item(columnIndex)).getAttributes().getNamedItem("property").getTextContent());
+				propertyNames.get(index + 1).add(((Element) columns.item(columnIndex)).getAttributes().getNamedItem("property").getNodeValue());
 			}
 		}
 	}
