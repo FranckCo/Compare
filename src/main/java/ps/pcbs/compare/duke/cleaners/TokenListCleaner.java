@@ -13,8 +13,9 @@ import no.priv.garshol.duke.Cleaner;
  */
 public class TokenListCleaner implements Cleaner {
 
-	private String token = null;
+	private String token = "رام ,مكتب,شركة,دكتور,شركه,شراكة,شراكه,الشركة,الشركه,واخوانه,وإخوانه,واولاده,وأولاده,محلات,محل";
 	private List<String> toDelete = null;
+	private boolean complex=true;
 
 	public TokenListCleaner() {
 		super();
@@ -30,10 +31,10 @@ public class TokenListCleaner implements Cleaner {
 
 	@Override
 	public String clean(String value) {
-
+		
 		for (String token : this.getToDelete())
 			value = value.replace(token, "").replaceAll("\\s+", " ");
-
+		if(complex ){
 		if (value.contains("&") || value.contains("4")) {
 			if (value.trim().substring(0, 2).matches("\\p{InArabic}+")) {
 				value = value.replace("&", "و");
@@ -45,15 +46,17 @@ public class TokenListCleaner implements Cleaner {
 			}
 		}
 		
-		value = value.replace("أ", "ا").replace("إ", "ا").replace("إ", "ا")
-				.replace("آ", "ا");
-		value = value.replace("لأ", "لا").replace("لآ", "لا")
-				.replace("لإ", "لا");
+		value=value.replaceAll("ة", "ه");
+		
+		value = value.replaceAll("أ|إ|آ", "ا");
+		value = value.replaceAll("لآ|لأ|لإ", "لا");
 		value = value.replace("ابو ", "ابو").replace("أبو ", "أبو").replace("عبد ", "عبد")
 				.replace("دير ", "دير").replace("بير ", "بير").replace("كفر ", "كفر")
 				.replace("عين ", "عين").replace("نيو ", "نيو").replace("بيت ", "بيت");
 
 		return value.trim().replaceAll("[^\\p{InArabic}&&[^\\p{L}]&&[^\\s]]", "").toLowerCase().trim();
+	}
+	return value.trim();
 	}
 
 	public List<String> getToDelete() {
@@ -71,5 +74,13 @@ public class TokenListCleaner implements Cleaner {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public boolean isComplex() {
+		return this.complex;
+	}
+
+	public void setComplex(boolean complex) {
+		this.complex=complex;
 	}
 }
