@@ -41,6 +41,7 @@ public class FileProcessListener implements MatchListener {
 	private boolean xmlOutput = false;
 	private boolean emptyValues = false;
 	private Map<Integer, List<String>> propertyNames = null;
+	private Map<Integer, List<String>> propertyLabels = null;
 
 	private static final Logger logger = Logger
 			.getLogger(FileProcessListener.class); // TODO Switch to Log4J 2
@@ -114,8 +115,8 @@ public class FileProcessListener implements MatchListener {
 						+ separator + delimiter + confidence + delimiter+separator);
 			// Apparently, the records are in the reverse order compared to the
 			// groups in the configuration file
-			reportRecord(r2, 1, printStreamMatch);
 			reportRecord(r1, 2, printStreamMatch);
+			reportRecord(r2, 1, printStreamMatch);
 			if (xmlOutput)
 				printStreamMatch.print("\n\t</Match>");
 		}
@@ -138,8 +139,8 @@ public class FileProcessListener implements MatchListener {
 				printStreamMatch.print("\n" + delimiter + "MaybeMatch"
 						+ delimiter + separator + delimiter + confidence
 						+ delimiter+separator);
-			reportRecord(r2, 1, printStreamMatch);
 			reportRecord(r1, 2, printStreamMatch);
+			reportRecord(r2, 1, printStreamMatch);
 			if (xmlOutput)
 				printStreamMatch.print("\n\t</MaybeMatch>");
 		}
@@ -178,6 +179,7 @@ public class FileProcessListener implements MatchListener {
 		if (xmlOutput) {
 			printStreamMatch
 					.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			printStreamMatch.println("<?xml-stylesheet href=\"transfo.xsl\" type=\"text/xsl\"?>");
 			printStreamMatch.print("<MatchingResults>");
 			printStreamUnMatch
 					.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -185,11 +187,11 @@ public class FileProcessListener implements MatchListener {
 		} else {
 			printStreamMatch.print(delimiter + "TYPE_MATCH" + delimiter
 					+ separator + delimiter + "CONFIDENCE" + delimiter);
-			for (Integer index : propertyNames.keySet()) {
-				for (String propertyName : propertyNames.get(index)) {
-					printStreamMatch.print(separator + delimiter + propertyName
+			for (Integer index=propertyLabels.keySet().size();index>=1;index--) {
+				for (String propertyLabel : propertyLabels.get(index)) {
+					printStreamMatch.print(separator + delimiter + propertyLabel
 							+ delimiter);
-					printStreamUnMatch.print(delimiter + propertyName
+					printStreamUnMatch.print(delimiter + propertyLabel
 							+ delimiter + separator);
 				}
 			}
@@ -274,15 +276,20 @@ public class FileProcessListener implements MatchListener {
 		Document document = builder.parse(configurationFile);
 
 		propertyNames = new HashMap<Integer, List<String>>();
+		propertyLabels=new HashMap<Integer, List<String>>();
 		NodeList groupTags = document.getElementsByTagName("group");
 		for (int index = 0; index < groupTags.getLength(); index++) {
 			propertyNames.put(index + 1, new ArrayList<String>());
+			propertyLabels.put(index + 1, new ArrayList<String>());
 			Element groupTag = (Element) groupTags.item(index);
 			NodeList columns = groupTag.getElementsByTagName("column");
 			for (int columnIndex = 0; columnIndex < columns.getLength(); columnIndex++) {
 				propertyNames.get(index + 1).add(
 						((Element) columns.item(columnIndex)).getAttributes()
 								.getNamedItem("property").getNodeValue());
+				propertyLabels.get(index + 1).add(
+						((Element) columns.item(columnIndex)).getAttributes()
+								.getNamedItem("label").getNodeValue());
 			}
 		}
 	}
