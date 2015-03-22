@@ -26,6 +26,7 @@ public class Config {
 	public static String DEDUPLICATES;
 	public static String XLS = null;
 	public static String MATCHALL = null;
+	public static String BilanToken=null;
 
 	// The path to sources which are outside the project are loaded from a .properties file
 	static {
@@ -51,6 +52,7 @@ public class Config {
 			DUPLICATES=sources.getProperty("ps.pcbs.compare.sources.duplicates");
 			XLS=sources.getProperty("ps.pcbs.compare.sources.xls");
 			MATCHALL=sources.getProperty("ps.pcbs.compare.sources.matchall");
+			BilanToken=sources.getProperty("ps.pcbs.compare.sources.bilantoken");
 			
 		} catch (IOException ignored) {
 			// If the properties file can't be found or read, exceptions will be raised when trying to use the sources
