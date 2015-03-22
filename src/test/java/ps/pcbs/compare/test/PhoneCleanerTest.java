@@ -33,24 +33,24 @@ public class PhoneCleanerTest {
 		assertEquals("022922345", cleaner.clean("2922345-"));
 
 		// spec4
-		assertEquals("022722345", cleaner.clean("2722345/5"));
-		assertEquals("042467891", cleaner.clean("2467891/0"));
+		assertEquals("022722345#022722346", cleaner.clean("2722345/6"));
+		assertEquals("042467891#042467890", cleaner.clean("2467891/0"));
 
 		// spec5
-		assertEquals("022922345", cleaner.clean("2922345-5-6"));
+		assertEquals("022922345#022922346#022922347", cleaner.clean("2922345-6-7"));
 
 		// spec6
-		assertEquals("022212345", cleaner.clean("2212345-2412345"));
-		assertEquals("022512345", cleaner.clean("2512345+2412345"));
+		assertEquals("022212345#022412346", cleaner.clean("2212345-2412346"));
+		assertEquals("022512345#022412346", cleaner.clean("2512345+2412346"));
 
 		// spec7
-		assertEquals("022912345", cleaner.clean("2912345-0591234567"));
+		assertEquals("022912345#0591234567", cleaner.clean("2912345-0591234567"));
 
 		// spec8
-		assertEquals("022912345", cleaner.clean("2912345-2967891"));
+		assertEquals("022912345#022967891", cleaner.clean("2912345-2967891"));
 
 		// spec9
-		assertEquals("022912345", cleaner.clean("-2912345  2967891"));
+		assertEquals("022912345#022967891", cleaner.clean("-2912345  2967891"));
 
 		// spec10
 		assertEquals("0599123456", cleaner.clean("1599123456"));
@@ -94,7 +94,7 @@ public class PhoneCleanerTest {
 		//spec22
 		assertEquals("0591234567", cleaner.clean("0591234567سامر"));
 		
-		assertEquals("022952220", cleaner.clean("2952220+2954193"));
+		assertEquals("022952220#022954193", cleaner.clean("2952220+2954193"));
 		
 //		String s="0599521218يم /نديم د256";
 //		String s1="0599521218/";
