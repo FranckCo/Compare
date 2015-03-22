@@ -3,6 +3,7 @@ package ps.pcbs.compare.duke.cleaners;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ps.pcbs.compare.Config;
 import no.priv.garshol.duke.Cleaner;
 
 /**
@@ -22,6 +23,7 @@ public class PhoneCleaner implements Cleaner {
 
 		String trimmed = value.trim().replaceAll(" ", "")
 				.replaceAll("\\p{InArabic}+", "");
+		String compositeNumber;
 		Matcher matcher = pattern.matcher(trimmed);
 
 		if (matcher.matches())
@@ -48,30 +50,46 @@ public class PhoneCleaner implements Cleaner {
 		if (trimmed.matches("(23|24|27|29)[0-9]{5}[^0-9][0-9]")) {
 
 			if (value.startsWith("24")) {
-				return "04" + trimmed.substring(0, 7);
+				compositeNumber = "04" + trimmed.substring(0, 7);
+				compositeNumber = compositeNumber
+						+ Config.DEFAULT_TOKEN_SEPARATOR
+						+ compositeNumber.substring(0, 8) + trimmed.charAt(8);
+
+				return compositeNumber;
 			}
 
 			else {
-				return "02" + trimmed.substring(0, 7);
+				compositeNumber = "02" + trimmed.substring(0, 7);
+				compositeNumber = compositeNumber
+						+ Config.DEFAULT_TOKEN_SEPARATOR
+						+ compositeNumber.substring(0, 8) + trimmed.charAt(8);
+
+				return compositeNumber;
 			}
 
 		}
 
-		if (trimmed.matches("29[0-9]{5}[^0-9][0-9][^0-9][0-9]"))
-			return "02" + trimmed.substring(0, 7);
+		if (trimmed.matches("29[0-9]{5}[^0-9][0-9][^0-9][0-9]")) {
+			compositeNumber = "02" + trimmed.substring(0, 7);
+			compositeNumber = compositeNumber + Config.DEFAULT_TOKEN_SEPARATOR
+					+ compositeNumber.substring(0, 8) + trimmed.charAt(8);
+			compositeNumber = compositeNumber + Config.DEFAULT_TOKEN_SEPARATOR
+					+ compositeNumber.substring(0, 8) + trimmed.charAt(10);
+			return compositeNumber;
+		}
 
 		if (trimmed.matches("(22|25|27)[0-9]{5}[^0-9](24|27)[0-9]{5}")) {
-			return "02" + trimmed.substring(0, 7);
+			return "02" + trimmed.substring(0, 7)+Config.DEFAULT_TOKEN_SEPARATOR+"02"+trimmed.substring(8);
 		}
 		if (trimmed.matches("29[0-9]{5}[^0-9](059)[0-9]{7}")) {
-			return "02" + trimmed.substring(0, 7);
+			return "02" + trimmed.substring(0, 7)+Config.DEFAULT_TOKEN_SEPARATOR+trimmed.substring(8);
 		}
 
 		if (trimmed.matches("29[0-9]{5}[^0-9]29[0-9]{5}"))
-			return "02" + trimmed.substring(0, 7);
+			return "02" + trimmed.substring(0, 7)+Config.DEFAULT_TOKEN_SEPARATOR+"02"+trimmed.substring(8);
 
 		if (trimmed.matches("[^0-9]29[0-9]{5}29[0-9]{5}"))
-			return "02" + trimmed.substring(1, 8);
+			return "02" + trimmed.substring(1, 8)+Config.DEFAULT_TOKEN_SEPARATOR+"02"+trimmed.substring(8);
 
 		if (trimmed.matches("(1599|1544)[0-9]{6}"))
 			return "0" + trimmed.substring(1);
