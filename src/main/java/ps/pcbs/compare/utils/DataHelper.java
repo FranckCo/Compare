@@ -2,10 +2,18 @@ package ps.pcbs.compare.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,11 +21,14 @@ import java.util.regex.Pattern;
 import no.priv.garshol.duke.Cleaner;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import ps.pcbs.compare.Config;
 import ps.pcbs.compare.Configuration;
 import ps.pcbs.compare.duke.cleaners.PhoneCleaner;
 
@@ -25,17 +36,22 @@ public class DataHelper {
 
 	public static void main(String[] args) throws IOException {
 
-		DataHelper helper = new DataHelper(Configuration.CENSUS);
-		helper.countTokens(0, 2, true, 8, null);
-		//helper.count(0, 2, true, 1,  ps.pcbs.compare.duke.cleaners.LeadingAlphaCleaner.class);
-		//helper.checkCodification(0, 0, true, 12, 13);
-		//helper.countNullOrVoid(0, 0, true, 7);
-		//helper.countEqual(0, 0, true, 6, 9);
-		//helper.checkRegex(0, 0, true, 4, Configuration.RAMALLAH_PHONE_REGEX);
+//		DataHelper helper = new DataHelper(Configuration.CENSUS);
+//		helper.countTokens(0, 0, true, 8, null, Config.BilanToken);
+		DataHelper helper = new DataHelper(Config.RAMALLAH);
+		helper.countTokens(0, 0, true, 2, null, Config.BilanToken);
+		// helper.count(0, 2, true, 1,
+		// ps.pcbs.compare.duke.cleaners.LeadingAlphaCleaner.class);
+		// helper.checkCodification(0, 0, true, 12, 13);
+		// helper.countNullOrVoid(0, 0, true, 7);
+		// helper.countEqual(0, 0, true, 6, 9);
+		// helper.checkRegex(0, 0, true, 4, Configuration.RAMALLAH_PHONE_REGEX);
 	}
 
 	private String bookPath = null;
 	private PhoneCleaner phoneCleaner = new PhoneCleaner();
+	private File reportFile = null;
+	private PrintStream printStream = null;
 
 	/**
 	 * Log4J logger.
@@ -115,13 +131,23 @@ public class DataHelper {
 	/**
 	 * Counts the frequencies of the text tokens in the (string) values of a column.
 	 * 
-	 * @param sheetIndex Zero-based index of the sheet containing the data.
-	 * @param firstLineIndex Zero-based index of the first line to read in the sheet.
-	 * @param title Indicates if the first line to read contains the column names.
-	 * @param columnIndex Zero-based index of the column containing the values to count.
-	 * @param cleanerClass Cleaner A cleaner to apply to the column values.
+	 * @param sheetIndex
+	 *            Zero-based index of the sheet containing the data.
+	 * @param firstLineIndex
+	 *            Zero-based index of the first line to read in the sheet.
+	 * @param title
+	 *            Indicates if the first line to read contains the column names.
+	 * @param columnIndex
+	 *            Zero-based index of the column containing the values to count.
+	 * @param cleanerClass
+	 *            Cleaner A cleaner to apply to the column values.
+	 * @param reprtFilePath
+	 *           file in which we write results
+	 * @throws UnsupportedEncodingException 
+	 * @throws FileNotFoundException 
 	 */
-	void countTokens(int sheetIndex, int firstLineIndex, boolean title, int columnIndex, Class<? extends Cleaner> cleanerClass) {
+	void countTokens(int sheetIndex, int firstLineIndex, boolean title,
+			int columnIndex, Class<? extends Cleaner> cleanerClass, String reportFilePath) throws FileNotFoundException, UnsupportedEncodingException {
 
 		logger.debug("Trying to open Excel file " + bookPath);
 
@@ -131,10 +157,11 @@ public class DataHelper {
 			cleaner = cleanerClass.newInstance();
 		} catch (Exception ignored) {} // An NPE will occur later
 
-		XSSFSheet data = null;
+		HSSFSheet data = null;
 		InputStream sourceFile = null;
 		try {
-			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(new File(bookPath)));
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(new File(
+					bookPath)));
 			data = wb.getSheetAt(sheetIndex);
 		} catch (Exception e) {
 			logger.fatal("Error opening Excel file: " + e.getMessage());
@@ -155,8 +182,11 @@ public class DataHelper {
 
 		// If first line is titles, get the column name
 		String variableName;
-		if (title && rows.hasNext()) variableName = formatter.formatCellValue(rows.next().getCell(columnIndex));
-		else variableName = "Column " + columnIndex;
+		if (title && rows.hasNext())
+			variableName = formatter.formatCellValue(rows.next().getCell(
+					columnIndex));
+		else
+			variableName = "Column " + columnIndex;
 
 		int rowNumber = 1;
 		while (rows.hasNext()) {
@@ -173,11 +203,43 @@ public class DataHelper {
 		// Report
 		System.out.println(variableName);
 		logger.info("Value counts for variable " + variableName);
-		for (String value : counter.keySet()) {
-			System.out.println(value + "\t" + counter.get(value));
-			//logger.info("Value: " + value + "\t\t\tCount: " + counter.get(value));
+		Map<String, Integer> sortedMap = sortByComparator(counter);
+		if (reportFilePath== null)
+			printStream = System.out;
+		else {
+			reportFile = new File(reportFilePath);
+			printStream = new PrintStream(reportFile, "UTF-8");
+		}
+		for (String value : sortedMap.keySet()) {
+//			System.out.println(value + "\t" + sortedMap.get(value));
+			printStream.println(value + "\t" + sortedMap.get(value));
+			// logger.info("Value: " + value + "\t\t\tCount: " +
+			// counter.get(value));
 		}
 		System.out.println("Number of lines: " + (rowNumber - 1));
+	}
+
+	private Map<String, Integer> sortByComparator(Map<String, Integer> counter) {
+		// Convert Map to List
+		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(
+				counter.entrySet());
+
+		// Sort list with comparator, to compare the Map values
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> o1,
+					Map.Entry<String, Integer> o2) {
+				return (o2.getValue()).compareTo(o1.getValue());
+			}
+		});
+
+		// Convert sorted map back to a Map
+		Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>();
+		for (Iterator<Map.Entry<String, Integer>> it = list.iterator(); it
+				.hasNext();) {
+			Map.Entry<String, Integer> entry = it.next();
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedMap;
 	}
 
 	/**
