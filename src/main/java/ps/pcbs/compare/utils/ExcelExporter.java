@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -43,28 +45,27 @@ public class ExcelExporter {
 				ExcelExporter exporter = new ExcelExporter(
 						file.getAbsolutePath(), file.getAbsolutePath()
 								.replaceAll("xls", "csv"));
-				if (file.getName().toLowerCase().startsWith("municipality")) {
-					exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2,
-							3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-							17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-							30), Arrays.asList(3, 4));
-				} else {
-					exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2,
-							3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-							17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-							30), null);
-				}
+				// if(file.getName().startsWith("Establishment Census 2012_RAMALLAH"))
+				exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2, 3, 4,
+						5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+						20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33),null);
+				// // else{
+				// exporter.exportColumns(0, 0, true, Arrays.asList(0, 1, 2,
+				// 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+				// 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				// 30,31,32,33), null,null,0);
+				// // }
 			}
 		}
-
-		// ExcelExporter exporter = new ExcelExporter(Configuration.ISIC,
-		// "src/test/resources/isic-5.xml");
-		// exporter.exportISICSolr(5, 5);
-		// ExcelExporter exporter0 = new ExcelExporter(Config.CENSUS,
-		// Config.CENSUS.replace("xls", "csv"));
-		// exporter0.exportColumns(0, 0, true,
-		// Arrays.asList(0,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
 	}
+
+	// ExcelExporter exporter = new ExcelExporter(Configuration.ISIC,
+	// "src/test/resources/isic-5.xml");
+	// exporter.exportISICSolr(5, 5);
+	// ExcelExporter exporter0 = new ExcelExporter(Config.CENSUS,
+	// Config.CENSUS.replace("xls", "csv"));
+	// exporter0.exportColumns(0, 0, true,
+	// Arrays.asList(0,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31));
 
 	private String bookPath = null;
 	private String csvPath = null;
@@ -284,11 +285,15 @@ public class ExcelExporter {
 			Row titles = rows.next();
 			Iterator<Cell> cells = titles.cellIterator();
 			StringBuilder builder = new StringBuilder();
+			String cellValue = "LineNumber";
+			builder.append(delimiter).append(cellValue).append(delimiter)
+					.append(separator);
 			while (cells.hasNext()) {
+
 				Cell cell = cells.next();
 				if (columnIndexes.contains(cell.getColumnIndex())) {
 
-					String cellValue = formatter.formatCellValue(cell)
+					cellValue = formatter.formatCellValue(cell)
 							.replaceAll("\\s+", " ").trim();
 					builder.append(delimiter).append(cellValue)
 							.append(delimiter).append(separator);
@@ -298,11 +303,12 @@ public class ExcelExporter {
 			}
 			if (Phonescolumn != null && !Phonescolumn.isEmpty()) {
 
-				String cellValue = "Phone";
+				cellValue = "Phone";
 				builder.append(delimiter).append(cellValue).append(delimiter)
 						.append(separator);
 
 			}
+
 			// Delete last separator
 			if (builder.length() > 0)
 				builder.deleteCharAt(builder.length() - separator.length());
@@ -320,7 +326,10 @@ public class ExcelExporter {
 			// if (!formatter.formatCellValue(row.getCell(2)).equals("301810"))
 			// continue;
 			int j = 0;
+			builder.append(delimiter).append(rowNumber + 1).append(delimiter)
+					.append(separator);
 			while (cells.hasNext()) {
+
 				Cell cell = cells.next();
 
 				if (Phonescolumn != null
@@ -333,12 +342,12 @@ public class ExcelExporter {
 							Phonebuilder.append(Config.DEFAULT_TOKEN_SEPARATOR);
 
 						String cellValue = formatter.formatCellValue(cell)
-								.replaceAll("\\s+", " ")
-								.replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
-								.replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
-								.replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
-								.replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
-						;
+								.replaceAll("\\s+", " ");
+						// .replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+
 						Phonebuilder.append(cellValue);
 						j++;
 						if (j == Phonescolumn.size())
@@ -347,17 +356,19 @@ public class ExcelExporter {
 
 				}
 				if (columnIndexes.contains(cell.getColumnIndex())) {
+
 					String cellValue = formatter.formatCellValue(cell)
-							.replaceAll("\\s+", " ")
-							.replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
-							.replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
-							.replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
-							.replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
-					;
+							.replaceAll("\\s+", " ");
+					// .replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+
 					builder.append(delimiter).append(cellValue)
 							.append(delimiter).append(separator);
-
+					// System.out.println(builder);
 				}
+
 			}
 			if (Phonebuilder.length() > 0) {
 				if (!Phonebuilder.substring(Phonebuilder.length() - 1).equals(
@@ -366,8 +377,196 @@ public class ExcelExporter {
 			}
 			builder.append(Phonebuilder);
 			// Delete last separator
+			// if (builder.length() > 0)
+			// builder.deleteCharAt(builder.length() - separator.length());
+
+			if (rowNumber > 1)
+				outStream.println();
+
+			outStream.print(builder);
+
+			// For test purposes
+			if (rowNumber == maxLines)
+				break;
+			rowNumber++;
+		}
+		logger.debug("Closing output file, " + rowNumber + " lines written");
+		outStream.close();
+	}
+
+	/**
+	 * Reads the Excel file and exports selected columns to the CSV file.
+	 * 
+	 * @param sheetIndex
+	 *            Zero-based index of the sheet containing the data.
+	 * @param firstLineIndex
+	 *            Zero-based index of the first line to read in the sheet.
+	 * @param title
+	 *            Indicates if the first line to read contains the column names.
+	 * @param columnIndexes
+	 *            A list of integers giving the (zero-based) indexes of the
+	 *            columns to export.
+	 * @param Phonescolumn
+	 *            A list of phone numbers to agregte in order to deal with
+	 *            multiple phone filled
+	 * @param regex
+	 *            the regular expression used in order to filter datas
+	 * @param columnFilterIndex
+	 *            the column on which we apply the regular expression in order
+	 *            to filter datas
+	 */
+	void exportFilterColumns(int sheetIndex, int firstLineIndex, boolean title,
+			List<Integer> columnIndexes, List<Integer> Phonescolumn,
+			String regex, int columnFilterIndex) {
+
+		logger.debug("Trying to open Excel file " + bookPath);
+		Pattern pattern = null;
+		if (regex != null)
+			pattern = Pattern.compile(regex);
+		HSSFSheet data = null;
+		InputStream sourceFile = null;
+		try {
+			FileInputStream inputStream = new FileInputStream(
+					new File(bookPath));
+			HSSFWorkbook wb = new HSSFWorkbook(inputStream);
+			data = wb.getSheetAt(sheetIndex);
+		} catch (Exception e) {
+			logger.fatal("Error opening Excel file: " + e.getMessage());
+			return;
+		} finally {
+			if (sourceFile != null)
+				try {
+					sourceFile.close();
+				} catch (Exception ignored) {
+				}
+		}
+
+		// Opening output file
+		PrintStream outStream = null;
+		try {
+			outStream = new PrintStream(new File(csvPath));
+		} catch (FileNotFoundException e) {
+			logger.fatal("Error opening output file: " + e.getMessage());
+		}
+
+		logger.debug("Beginning to read sheet " + data.getSheetName());
+
+		DataFormatter formatter = new DataFormatter();
+		Iterator<Row> rows = data.rowIterator();
+
+		// Skip first lines if necessary
+		if (firstLineIndex > 0)
+			while (rows.hasNext()
+					&& rows.next().getRowNum() < firstLineIndex - 1)
+				;
+
+		// If first line is titles, write column names
+		if (title && rows.hasNext()) {
+			Row titles = rows.next();
+			Iterator<Cell> cells = titles.cellIterator();
+			StringBuilder builder = new StringBuilder();
+			String cellValue = "LineNumber";
+			builder.append(delimiter).append(cellValue).append(delimiter)
+					.append(separator);
+			while (cells.hasNext()) {
+
+				Cell cell = cells.next();
+				if (columnIndexes.contains(cell.getColumnIndex())) {
+
+					cellValue = formatter.formatCellValue(cell)
+							.replaceAll("\\s+", " ").trim();
+					builder.append(delimiter).append(cellValue)
+							.append(delimiter).append(separator);
+
+				}
+
+			}
+			if (Phonescolumn != null && !Phonescolumn.isEmpty()) {
+
+				cellValue = "Phone";
+				builder.append(delimiter).append(cellValue).append(delimiter)
+						.append(separator);
+
+			}
+
+			// Delete last separator
 			if (builder.length() > 0)
 				builder.deleteCharAt(builder.length() - separator.length());
+			outStream.println(builder);
+		}
+
+		int rowNumber = 1;
+		while (rows.hasNext()) {
+
+			Row row = rows.next();
+			Iterator<Cell> cells = row.cellIterator();
+			StringBuilder builder = new StringBuilder();
+			StringBuilder Phonebuilder = new StringBuilder();
+			// We can insert a filter here
+			// Matcher matcher = pattern.matcher(phoneCleaner.clean(value));//
+			// we could use a cleaner cleaner.clean(value);
+			if (pattern != null) {
+				Matcher matcher = pattern.matcher(formatter.formatCellValue(
+						row.getCell(columnFilterIndex)).trim());
+				if (!matcher.matches())
+					continue;
+			}
+			int j = 0;
+			builder.append(delimiter).append(rowNumber + 1).append(delimiter)
+					.append(separator);
+			while (cells.hasNext()) {
+
+				Cell cell = cells.next();
+
+				if (Phonescolumn != null
+						&& Phonescolumn.contains(cell.getColumnIndex())) {
+					if (cell != null
+							&& !formatter.formatCellValue(cell).equals("")) {
+						if (j == 0)
+							Phonebuilder.append(delimiter);
+						if (j > 0)
+							Phonebuilder.append(Config.DEFAULT_TOKEN_SEPARATOR);
+
+						String cellValue = formatter.formatCellValue(cell)
+								.replaceAll("\\s+", " ");
+						// .replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+						// .replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+
+						Phonebuilder.append(cellValue);
+						j++;
+						if (j == Phonescolumn.size())
+							Phonebuilder.append(delimiter).append(separator);
+					}
+
+				}
+				if (columnIndexes.contains(cell.getColumnIndex())) {
+
+					String cellValue = formatter.formatCellValue(cell)
+							.replaceAll("\\s+", " ");
+					// .replace("/", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("+", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("-", Config.DEFAULT_TOKEN_SEPARATOR)
+					// .replace("|", Config.DEFAULT_TOKEN_SEPARATOR);
+
+					builder.append(delimiter).append(cellValue)
+							.append(delimiter).append(separator);
+
+					// System.out.println(builder);
+				}
+
+			}
+			if (Phonebuilder.length() > 0) {
+				if (!Phonebuilder.substring(Phonebuilder.length() - 1).equals(
+						separator))
+					Phonebuilder.append(delimiter).append(separator);
+			}
+			builder.append(Phonebuilder);
+			// Delete last separator
+			// if (builder.length() > 0)
+			// builder.deleteCharAt(builder.length() - separator.length());
+
 			if (rowNumber > 1)
 				outStream.println();
 
