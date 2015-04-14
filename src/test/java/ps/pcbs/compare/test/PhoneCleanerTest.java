@@ -34,7 +34,8 @@ public class PhoneCleanerTest {
 
 		// spec4
 		assertEquals("022722345#022722346", cleaner.clean("2722345/6"));
-		assertEquals("042467891#042467890", cleaner.clean("2467891/0"));
+//		assertEquals("02467891#042467890", cleaner.clean("2467891/0"));
+		assertEquals("024678910", cleaner.clean("2467891/0"));
 
 		// spec5
 		assertEquals("022922345#022922346#022922347", cleaner.clean("2922345-6-7"));
@@ -95,6 +96,26 @@ public class PhoneCleanerTest {
 		assertEquals("0591234567", cleaner.clean("0591234567سامر"));
 		
 		assertEquals("022952220#022954193", cleaner.clean("2952220+2954193"));
+		
+		// new cases from Hebron 
+		assertEquals("0599379511#0599379511", cleaner.clean("0599379511 0599379511"));
+		assertEquals("0599262852#0599373860", cleaner.clean("0599262852 0599373860"));
+		
+		assertEquals("022228158#0599241575", cleaner.clean("2228158 0599241575"));
+		assertEquals("022258965#0599337470", cleaner.clean("2258965 0599337470"));
+		
+		assertEquals("022225940", cleaner.clean("2225940"));
+		
+		assertEquals("022227593", cleaner.clean("02/2227593"));
+				
+		assertEquals("022214060#0599939387", cleaner.clean("02/2214060 0599939387"));
+		assertEquals("022217766#0599278980", cleaner.clean("02/2217766 0599278980"));
+		
+		assertEquals("0599278980", cleaner.clean("0599278980"));
+		
+//		assertEquals("05969442011", cleaner.clean("969442011"));
+		
+		
 		
 //		String s="0599521218يم /نديم د256";
 //		String s1="0599521218/";
