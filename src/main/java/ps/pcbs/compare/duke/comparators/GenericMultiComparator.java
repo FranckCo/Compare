@@ -11,7 +11,6 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 
 	private String separator = Config.DEFAULT_TOKEN_SEPARATOR;
 	private Comparator comparator = null;
-	private String baseComparator = null;
 
 	public GenericMultiComparator() {
 		super();
@@ -22,10 +21,6 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 		this.comparator = comparator;
 	}
 
-	public GenericMultiComparator(String comparatorClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-		super();
-		this.setComparator(comparatorClassName);
-	}
 
 	@Override
 	public boolean isTokenized() {
@@ -36,7 +31,7 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 	// TODO See if a more precise scoring is possible
 	@Override
 	public double compare(String v1, String v2) {
-
+		
 		List<String> list1 = new ArrayList<String>(Arrays.asList(v1.split(separator)));
 		List<String> list2 = new ArrayList<String>(Arrays.asList(v2.split(separator)));
 		double score = 0.0;
@@ -56,21 +51,7 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 	}
 	
 	public Comparator getComparator() {
-		try {
-			Class<?> comparatorClass = Class.forName(this.baseComparator);
-			this.comparator = (Comparator) comparatorClass.newInstance();
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Invalid class name "
-					+ comparator);
-		}
-		return comparator;
-	}
-
-
-	public void setComparator(String comparatorClassName) throws ClassNotFoundException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-		Class<?> comparatorClass = Class.forName(comparatorClassName);
-		this.comparator = (Comparator) comparatorClass.newInstance();
+		return this.comparator;
 	}
 	
 	public String getSeparator() {
@@ -81,11 +62,4 @@ public class GenericMultiComparator<T extends Comparator> implements Comparator 
 		this.separator = separator;
 	}
 
-	public String getBaseComparator() {
-		return baseComparator;
-	}
-
-	public void setBaseComparator(String baseComparator) {
-		this.baseComparator = baseComparator;
-	}
 }
