@@ -142,19 +142,9 @@
 			<name>Work_Doesn'tWork</name>
 		</property>
 		
-		<property  type="ignore">
-			<name>ADRESS1</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS2</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS3</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS4</name>
-		</property>
-		
+<!-- 		<property  type="ignore"> -->
+<!-- 			<name>ADRESS1</name> -->
+<!-- 		</property> -->
 		
 		<property  type="ignore">
 			<name>Establishment_OwnerShip</name>
@@ -219,7 +209,7 @@
 	<group>
 		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
 			<param name="input-file"
-				value="C:/Users/lenovo/Compare/files/csv/Census2012_Ramallah_Albireh.csv"
+				value="C:/Users/lenovo/Compare/files/csv/Cenus2012_Birzeit.csv"
 				separator="\t" />
 			<column name="Q01" property="CODE" label="Census_LocalityCode"/>
 			<column name="Q02" property="Enumeration_Area" label="Census_Enumeration_Area"/>
@@ -236,7 +226,9 @@
 			
 			<column name="Q18" property="Sex" label="Census_Sex"/>
 			
+<!-- 		<column name="Q19" property="TELEPHONE" cleaner="PhoneCleaner" label="Census_Telephone"/> -->
 			<column name="Q19" property="TELEPHONE" cleaner="PhoneCleaner" label="Census_Telephone"/>
+			
 			<column name="Q20" property="Quarter" label="Census_Quarter"/>
 			<column name="Q21" property="Street" label="Census_Street"/>
 			<column name="Q22" property="Building" label="Census_Building"/>
@@ -268,32 +260,27 @@
 	<group>
 		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
 			<param name="input-file"
-				value="C:/Users/lenovo/Compare/files/csv/Municipality of Ramallah.csv"
+				value="C:/Users/lenovo/Compare/files/csv/Municipality of Birzeit.csv"
 				separator="\t" />
 
-			<column name="Z01" property="CODE" label="MunicipalityRamallah_LocalityCode"/>
-			<column name="Z02" property="DEALER_NAME" label="MunicipalityRamallah_DealerName"/>
-			<column name="Z03" property="COMMERCIAL_NAME" label="MunicipalityRamallah_CommercialName"/>
-			<column name="Z03#Z02" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="MunicipalityRamallah_CommercialOwnerName"/>
-			<column name="Z04#Z05" property="TELEPHONE" cleaner="PhoneCleaner" label="MunicipalityRamallah_Telephone"/>
+
+			<column name="OWNER_NAME" property="DEALER_NAME" label="MunicipalityBirzeit_DealerName"/>
+			<column name="COMMERCIAL_NAME" property="COMMERCIAL_NAME" label="MunicipalityBirzeit_CommercialName"/>
+			<column name="COMMERCIAL_NAME#OWNER_NAME" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="MunicipalityBirzeit_CommercialOwnerName"/>
+<!-- 			<column name="TELEPHONE" property="TELEPHONE" cleaner="PhoneCleaner" label="MunicipalityBirzeit_Telephone"/> -->
+			<column name="TELEPHONE" property="TELEPHONE" cleaner="PhoneCleaner" label="MunicipalityBirzeit_Telephone"/>
 			
-			<column name="Z06" property="Basin" label="MunicipalityRamallah_Basin"/>
-			<column name="Z07" property="Neighborhood" label="MunicipalityRamallah_Neighborhood"/>
-			<column name="Z08" property="Plot" label="MunicipalityRamallah_Plot"/>
-			<column name="Z09" property="OtherIndicationOfAdress" label="MunicipalityRamallah_OtherIndicationOfAdress"/>
+			<column name="STREET_ADRESS" property="Street" label="MunicipalityBirzeit_Street"/>
+					
 			
-			<column name="Z10" property="ACTIVITY" label="MunicipalityRamallah_Activity"/>
+			<column name="BUILDING_ADRESS" property="Building" label="MunicipalityBirzeit_AdressBuilding"/>
 			
-			<column name="Z11" property="License" label="MunicipalityRamallah_License"/>
-			<column name="Z12" property="Work_Doesn'tWork" label="MunicipalityRamallah_Work_Doesn'tWork"/>
+			<column name="LineNumber" property="LineNumber" label="MunicipalityBirzeit_Line" />
 			
-			<column name="Z13" property="ADRESS1" label="MunicipalityRamallah_Adress1"/>
+										
+							
 			
-			<column name="Z14" property="ADRESS2" label="MunicipalityRamallah_Adress2"/>
-			<column name="Z15" property="ADRESS3" label="MunicipalityRamallah_Adress3"/>
-			<column name="Z16" property="ADRESS4" label="MunicipalityRamallah_Adress4"/>
 			
-			<column name="LineNumber" property="LineNumber" label="MuicipalityRamallah_Line" />
 		</data-source>
 	</group>
 

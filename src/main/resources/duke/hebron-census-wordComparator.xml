@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <duke>
 
-	<object class="ps.pcbs.compare.duke.cleaners.PhoneCleaner" name="SimplePhoneCleaner"></object>
+<object class="ps.pcbs.compare.duke.cleaners.PhoneCleaner" name="SimplePhoneCleaner"></object>
 	<object class="ps.pcbs.compare.duke.cleaners.MultiCleaner" name="PhoneCleaner">
 		<param name="Cleaner" value="SimplePhoneCleaner" />
 		<param name="separator" value="#" />
@@ -31,6 +31,28 @@
 		<param name="Cleaner" value="text-cleaner" />
 		<param name="separator" value="#" />
 	</object>
+
+<!-- 	<object class="ps.pcbs.compare.duke.comparators.WordCountComparator" -->
+<!-- 		name="word-comp1"> -->
+<!-- 		<param name="threshold" value="4" /> -->
+<!-- 	</object> -->
+	
+<!-- 	<object class="ps.pcbs.compare.duke.comparators.WordCountComparator" -->
+<!-- 		name="word-comp2"> -->
+<!-- 		<param name="threshold" value="4" /> -->
+<!-- 	</object> -->
+	
+<!-- 	<object class="ps.pcbs.compare.duke.comparators.DoubleWordCountComparator" -->
+<!-- 		name="multi-word-comp"> -->
+<!-- 		<param name="firstComparator" value="word-comp1" /> -->
+<!-- 		<param name="secondComparator" value="word-comp2" /> -->
+<!-- 	</object> -->
+
+<!-- 	<object class="ps.pcbs.compare.duke.cleaners.MultiCleaner" -->
+<!-- 		name="com-own-cleaner"> -->
+<!-- 		<param name="baseCleaner" value="ps.pcbs.compare.duke.cleaners.TokenListCleaner" /> -->
+<!-- 		<param name="separator" value="#" /> -->
+<!-- 	</object> -->
 
 	<schema>
 		<threshold>0.80</threshold>
@@ -82,7 +104,7 @@
 		<property>
 			<name>COMMERCIALOWNER_NAME</name>
 			<comparator>ps.pcbs.compare.duke.comparators.CommercialOwnerNameComparator</comparator>
-			<low>0.45</low>
+			<low>0.47</low>
 			<high>0.95</high>
 		</property>
 		
@@ -94,7 +116,7 @@
 			<name>TELEPHONE</name>
 			<comparator>multi-phone-comp</comparator>
 			<low>0.50</low>
-			<high>0.90</high>
+			<high>0.85</high>
 		</property>
 		
 		
@@ -111,48 +133,11 @@
 		<property  type="ignore">
 			<name>OperationalStatus</name>
 		</property>
-		
-		<property  type="ignore">
-			<name>Basin</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>Neighborhood</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>Plot</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>OtherIndicationOfAdress</name>
-		</property>
 
 		
 		
 		<property  type="ignore">
 			<name>ACTIVITY</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>License</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>Work_Doesn'tWork</name>
-		</property>
-		
-		<property  type="ignore">
-			<name>ADRESS1</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS2</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS3</name>
-		</property>
-				<property  type="ignore">
-			<name>ADRESS4</name>
 		</property>
 		
 		
@@ -209,6 +194,9 @@
 			<name>Reason_for_rejection</name>
 		</property>
 		
+		<property  type="ignore">
+			<name>ADRESS</name>
+		</property>
 		
 		<property  type="ignore">
 			<name>LineNumber</name>
@@ -219,7 +207,7 @@
 	<group>
 		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
 			<param name="input-file"
-				value="C:/Users/lenovo/Compare/files/csv/Census2012_Ramallah_Albireh.csv"
+				value="C:/Users/lenovo/Compare/files/csv/Establishment Census 2012_Hebron.csv"
 				separator="\t" />
 			<column name="Q01" property="CODE" label="Census_LocalityCode"/>
 			<column name="Q02" property="Enumeration_Area" label="Census_Enumeration_Area"/>
@@ -229,8 +217,8 @@
 			<column name="Q13" property="ID_of_Establishment" label="Census_ID_of_Establishment"/>
 			<column name="Q14" property="BuildingNumeroInEnumerationArea" label="Census_BuildingNumeroInEnumerationArea"/>
 			<column name="Q15" property="EstablishmentNumeroInEnumerationArea" label="Census_EstablishmentNumeroInEnumerationArea"/>
-			<column name="Q16" property="COMMERCIAL_NAME" label="Census_CommercialName"/>
-			<column name="Q17" property="DEALER_NAME" label="Census_DealerName"/>
+			<column name="Q16" property="COMMERCIAL_NAME" cleaner="TokenCleaner" label="Census_CommercialName"/>
+			<column name="Q17" property="DEALER_NAME" cleaner="TokenCleaner" label="Census_DealerName"/>
 			
 			<column name="Q16#Q17" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="Census_CommercialOwnerName"/>
 			
@@ -265,35 +253,22 @@
 			<column name="LineNumber" property="LineNumber" label="Census_Line" />
 		</data-source>
 	</group>
-	<group>
+		<group>
 		<data-source class="ps.pcbs.compare.duke.datasources.CSVModifiedDataSource">
 			<param name="input-file"
-				value="C:/Users/lenovo/Compare/files/csv/Municipality of Ramallah.csv"
+				value="C:/Users/lenovo/Compare/files/csv/Municipality of Hebron.csv"
 				separator="\t" />
 
-			<column name="Z01" property="CODE" label="MunicipalityRamallah_LocalityCode"/>
-			<column name="Z02" property="DEALER_NAME" label="MunicipalityRamallah_DealerName"/>
-			<column name="Z03" property="COMMERCIAL_NAME" label="MunicipalityRamallah_CommercialName"/>
-			<column name="Z03#Z02" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="MunicipalityRamallah_CommercialOwnerName"/>
-			<column name="Z04#Z05" property="TELEPHONE" cleaner="PhoneCleaner" label="MunicipalityRamallah_Telephone"/>
+			<column name="COMMERCIAL_NAME" property="COMMERCIAL_NAME" label="Municipality_Hebron_CommercialName"/>
+			<column name="OWNER_NAME" property="DEALER_NAME" cleaner="TokenCleaner" label="Municipality_Hebron_DealerName"/>
 			
-			<column name="Z06" property="Basin" label="MunicipalityRamallah_Basin"/>
-			<column name="Z07" property="Neighborhood" label="MunicipalityRamallah_Neighborhood"/>
-			<column name="Z08" property="Plot" label="MunicipalityRamallah_Plot"/>
-			<column name="Z09" property="OtherIndicationOfAdress" label="MunicipalityRamallah_OtherIndicationOfAdress"/>
+			<column name="COMMERCIAL_NAME#OWNER_NAME" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="Municipality_Hebron_CommercialOwnerName"/>
+			<column name="NOTES2" property="ADRESS" label="Municipality_Hebron_Adress"/>
+			<column name="ACTIVITY_DESCRIPTION" property="ACTIVITY" label="Municipality_Hebron_Activity"/>
+
+			<column name="TELEPHONE" property="TELEPHONE" cleaner="PhoneCleaner" label="Municipality_Hebron_Telephone"/>
 			
-			<column name="Z10" property="ACTIVITY" label="MunicipalityRamallah_Activity"/>
-			
-			<column name="Z11" property="License" label="MunicipalityRamallah_License"/>
-			<column name="Z12" property="Work_Doesn'tWork" label="MunicipalityRamallah_Work_Doesn'tWork"/>
-			
-			<column name="Z13" property="ADRESS1" label="MunicipalityRamallah_Adress1"/>
-			
-			<column name="Z14" property="ADRESS2" label="MunicipalityRamallah_Adress2"/>
-			<column name="Z15" property="ADRESS3" label="MunicipalityRamallah_Adress3"/>
-			<column name="Z16" property="ADRESS4" label="MunicipalityRamallah_Adress4"/>
-			
-			<column name="LineNumber" property="LineNumber" label="MuicipalityRamallah_Line" />
+			<column name="LineNumber" property="LineNumber" label="Municipality_Hebron_Line" />
 		</data-source>
 	</group>
 
