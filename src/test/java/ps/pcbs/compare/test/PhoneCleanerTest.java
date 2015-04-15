@@ -113,6 +113,8 @@ public class PhoneCleanerTest {
 		
 		assertEquals("0599278980", cleaner.clean("0599278980"));
 		
+		assertEquals(cleaner.clean("022980408"), cleaner.clean("2988459"));
+		
 //		assertEquals("05969442011", cleaner.clean("969442011"));
 		
 		
