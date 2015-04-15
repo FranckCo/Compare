@@ -10,9 +10,9 @@ public class ArabicTextCleaner implements Cleaner {
 
 	@Override
 	public String clean(String value) {
-
+		
 		if (value.contains("&") || value.contains("4")) {
-			if (value.trim().substring(0, 2).matches("\\p{InArabic}+")) {
+			if (value.length()>=2 && value.trim().substring(0, 2).matches("\\p{InArabic}+")) {
 				value = value.replace("&", "و");
 				if (value.contains("4"))
 					value = " فور " + value.replace("4", "");
@@ -60,6 +60,8 @@ public class ArabicTextCleaner implements Cleaner {
 			return value.trim()
 					.replaceAll("[^\\p{InArabic}&&[^\\p{L}]&&[^\\s]]", "")
 					.toLowerCase().trim();
+			
+//			return value.trim().toLowerCase().trim();
 	}
 
 }
