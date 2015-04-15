@@ -22,9 +22,13 @@ public class CommercialOwnerNameComparator implements Comparator {
 	@Override
 	public double compare(String v1, String v2) {
 		// TODO Auto-generated method stub
+//		System.out.println(" first string "+v1);
+//		System.out.println(" second string "+v2);
+		
 		if (isNull(v1) || isNull(v2))
 			return (v1 == v2 ? 1.0 : 0.0); // TODO Validate this
-
+		
+		
 		String[] sequence1 = v1.split(separator);
 		String[] sequence2 = v2.split(separator);
 
@@ -39,6 +43,8 @@ public class CommercialOwnerNameComparator implements Comparator {
 
 //		if (v1.equals(v2))
 //			return 1.0;
+		
+		if(maxLength==3) return (countCommonWords(commName1, commName2)==3 ? 1.0: 0.0);
 		if (maxLength > 5) {
 
 			return (countCommonWords(commName1, commName2) / maxLength > 0.75 ? 1.0
@@ -49,8 +55,8 @@ public class CommercialOwnerNameComparator implements Comparator {
 				return (countCommonWords(ownName1, ownName2) >= 1 ? 1.0 : 0.0);
 			if (countCommonWords(commName1, commName2) >= 2)
 				return (countCommonWords(ownName1, ownName2) >= 2 ? 1.0 : 0.0);
-			if (countCommonWords(commName1, commName2) >= 1)
-				return (countCommonWords(ownName1, ownName2) >= 3 ? 1.0 : 0.0);
+//			if (countCommonWords(commName1, commName2) >= 1)
+//				return (countCommonWords(ownName1, ownName2) >= 3 ? 1.0 : 0.0);
 		}
 		return 0.0;
 	}
