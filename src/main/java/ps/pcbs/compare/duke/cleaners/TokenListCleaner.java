@@ -13,7 +13,7 @@ import no.priv.garshol.duke.Cleaner;
  */
 public class TokenListCleaner implements Cleaner {
 
-	private String token = "رام ,مكتب,و شركاه,مغلق ابو علي,مغلق سفيان,مغلق سلطان,مغلق,غير موجود ابو علي,غير موجود سفيان,غير موجود مكانه,لا يوجد ابو علي,لا يوجد سفيان,شركة,دكتور,شركه,شراكة,شراكه,الشركة,الشركه,واخوانه,وإخوانه,واولاده,وأولاده,محلات,محل,م.خ.م,م. خ.م,م.خ,م.ع.ع,م.ع.م,م ع م,م ع";
+	private String token = null;
 	private List<String> toDelete = null;
 
 	public TokenListCleaner() {
