@@ -43,6 +43,8 @@ public class LinkageRunner {
 		}
 		// processor.link();
 		processor.close();
+		
+		// need to add here the filter multiple matches
 	}
 	
 	
