@@ -1,5 +1,7 @@
 package ps.pcbs.compare.duke.runners;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import no.priv.garshol.duke.ConfigLoader;
@@ -9,6 +11,7 @@ import no.priv.garshol.duke.matchers.PrintMatchListener;
 import ps.pcbs.compare.Config;
 import ps.pcbs.compare.duke.listeners.FileMatchListener;
 import ps.pcbs.compare.duke.listeners.FileProcessListener;
+import ps.pcbs.compare.utils.ExtractMultipleMatches;
 
 public class LinkageRunner {
 
@@ -45,6 +48,14 @@ public class LinkageRunner {
 		processor.close();
 		
 		// need to add here the filter multiple matches
+		ExtractMultipleMatches obj = new ExtractMultipleMatches();
+		String csvFile = Config.BILAN;
+		// Map <String,Integer> linestokeep=obj.run(csvFile,18);
+		// obj.keep(csvFile,linestokeep,18);
+		// Map <String,Integer> linestokeep=obj.run(csvFile,11);
+		// obj.keep(csvFile,linestokeep,11);
+		Map<String, Integer> linestokeep = obj.run(csvFile, 2);
+		obj.keep(csvFile, linestokeep, 2);
 	}
 	
 	
