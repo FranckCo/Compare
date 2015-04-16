@@ -19,6 +19,8 @@
 		<param name="token" value="رام ,مكتب,و شركاه,مغلق ابو علي,مغلق سفيان,مغلق سلطان,مغلق,غير موجود ابو علي,غير موجود سفيان,غير موجود مكانه,لا يوجد ابو علي,لا يوجد سفيان,الشركة,الشركه,شركة,دكتور,شركه,شراكة,شراكه,واخوانه,وإخوانه,واولاده,وأولاده,محلات,محل,م.خ.م,م. خ.م,م.خ,م.ع.ع,م.ع.م,م ع م,م ع" />
 	</object>
 	
+	<object class="ps.pcbs.compare.duke.cleaners.ActivityCodeToDescriptionCleaner" name="ActivityCleaner"></object>
+	
 	<object class="ps.pcbs.compare.duke.cleaners.ArabicTextCleaner" name="ArabicTextCleaner">
 	</object>
 		<object class="ps.pcbs.compare.duke.cleaners.CommercialOwnerNameCleaner"
@@ -242,7 +244,7 @@
 			<column name="Q22" property="Building" label="Census_Building"/>
 			<column name="Q23" property="OperationalStatus" label="Census_OperationalStatus"/>
 			
-			<column name="Q24" property="ACTIVITY" label="Census_Activity" />
+			<column name="Q24" property="ACTIVITY" cleaner="ActivityCleaner" label="Census_Activity" />
 			<column name="Q25" property="Establishment_OwnerShip" label="Census_Establishment_OwnerShip"/>
 			<column name="Q26" property="Economic_Organization" label="Census_Economic_Organization"/>
 			<column name="Q27" property="Legal_Status" label="Census_Legal_Status"/>
@@ -270,7 +272,7 @@
 			<param name="input-file"
 				value="C:/Users/lenovo/Compare/files/csv/Municipality of Ramallah.csv"
 				separator="\t" />
-
+			<column name="LineNumber" property="LineNumber" label="MuicipalityRamallah_Line" />
 			<column name="Z01" property="CODE" label="MunicipalityRamallah_LocalityCode"/>
 			<column name="Z02" property="DEALER_NAME" label="MunicipalityRamallah_DealerName"/>
 			<column name="Z03" property="COMMERCIAL_NAME" label="MunicipalityRamallah_CommercialName"/>
@@ -293,7 +295,6 @@
 			<column name="Z15" property="ADRESS3" label="MunicipalityRamallah_Adress3"/>
 			<column name="Z16" property="ADRESS4" label="MunicipalityRamallah_Adress4"/>
 			
-			<column name="LineNumber" property="LineNumber" label="MuicipalityRamallah_Line" />
 		</data-source>
 	</group>
 

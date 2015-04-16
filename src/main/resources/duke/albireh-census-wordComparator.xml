@@ -6,7 +6,9 @@
 		<param name="Cleaner" value="SimplePhoneCleaner" />
 		<param name="separator" value="#" />
 	</object>
-
+	
+	<object class="ps.pcbs.compare.duke.cleaners.ActivityCodeToDescriptionCleaner" name="ActivityCleaner"></object>
+	
 	<object class="ps.pcbs.compare.duke.comparators.SuffixComparator" name="suffixcomp"></object>
 	<object class="ps.pcbs.compare.duke.comparators.GenericMultiComparator"
 		name="multi-phone-comp">
@@ -234,7 +236,7 @@
 			<column name="Q22" property="Building" label="Census_Building"/>
 			<column name="Q23" property="OperationalStatus" label="Census_OperationalStatus"/>
 			
-			<column name="Q24" property="ACTIVITY" label="Census_Activity" />
+			<column name="Q24" property="ACTIVITY" cleaner="ActivityCleaner" label="Census_Activity" />
 			<column name="Q25" property="Establishment_OwnerShip" label="Census_Establishment_OwnerShip"/>
 			<column name="Q26" property="Economic_Organization" label="Census_Economic_Organization"/>
 			<column name="Q27" property="Legal_Status" label="Census_Legal_Status"/>
@@ -263,7 +265,7 @@
 				value="C:/Users/lenovo/Compare/files/csv/Municipality of Al Bireh.csv"
 				separator="\t" />
 
-
+			<column name="LineNumber" property="LineNumber" label="MunicipalityAlBireh_Line" />
 			<column name="OWNER_NAME" property="DEALER_NAME" label="MunicipalityAlBireh_DealerName"/>
 			<column name="COMMERCIAL_NAME" property="COMMERCIAL_NAME" label="MunicipalityAlBireh_CommercialName"/>
 			<column name="COMMERCIAL_NAME#OWNER_NAME" property="COMMERCIALOWNER_NAME" cleaner="com-own-cleaner" label="MunicipalityAlBireh_CommercialOwnerName"/>
@@ -279,7 +281,7 @@
 			
 			<column name="ADRESS" property="ADRESS1" label="MunicipalityAlBireh_Adress1"/>
 			
-			<column name="LineNumber" property="LineNumber" label="MunicipalityAlBireh_Line" />
+			
 			
 										
 			

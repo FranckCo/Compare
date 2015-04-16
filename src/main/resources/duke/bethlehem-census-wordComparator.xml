@@ -13,7 +13,9 @@
 		<param name="comparator" value="suffixcomp" />
 		<param name="separator" value="#" />
 	</object>
-
+	
+	<object class="ps.pcbs.compare.duke.cleaners.ActivityCodeToDescriptionCleaner" name="ActivityCleaner"></object>
+	
 	<object class="ps.pcbs.compare.duke.cleaners.TokenListCleaner"
 		name="TokenCleaner">
 		<param name="token" value="رام ,مكتب,و شركاه,مغلق ابو علي,مغلق سفيان,مغلق سلطان,مغلق,غير موجود ابو علي,غير موجود سفيان,غير موجود مكانه,لا يوجد ابو علي,لا يوجد سفيان,الشركة,الشركه,شركة,دكتور,شركه,شراكة,شراكه,واخوانه,وإخوانه,واولاده,وأولاده,محلات,محل,م.خ.م,م. خ.م,م.خ,م.ع.ع,م.ع.م,م ع م,م ع" />
@@ -205,7 +207,7 @@
 			<column name="Q22" property="Building" label="Census_Building"/>
 			<column name="Q23" property="OperationalStatus" label="Census_OperationalStatus"/>
 			
-			<column name="Q24" property="ACTIVITY" label="Census_Activity" />
+			<column name="Q24" property="ACTIVITY" cleaner="ActivityCleaner" label="Census_Activity" />
 			<column name="Q25" property="Establishment_OwnerShip" label="Census_Establishment_OwnerShip"/>
 			<column name="Q26" property="Economic_Organization" label="Census_Economic_Organization"/>
 			<column name="Q27" property="Legal_Status" label="Census_Legal_Status"/>
@@ -233,7 +235,7 @@
 			<param name="input-file"
 				value="C:/Users/lenovo/Compare/files/csv/bethlehem_file.csv"
 				separator="\t" />
-
+			<column name="LineNumber" property="LineNumber" label="Municipality_Bethlehem_Line" />
   			<column name="C01" property="CODE" label="Bethlehem_Code"/>  
 
 			<column name="C02" property="COMMERCIAL_NAME" cleaner="text-cleaner" label="Municipality_Bethlehem_CommercialName"/>
@@ -244,7 +246,6 @@
 			<column name="C06" property="FAX" label="Municipality_Bethlehem_Fax"/>
 			<columnn name="ISICSymbol" property="ACTIVITY_CODE" label="Municipality_Bethlehem_ActivityCode"/>
 			
-			<column name="LineNumber" property="LineNumber" label="Municipality_Bethlehem_Line" />
 		</data-source>
 	</group>
 
