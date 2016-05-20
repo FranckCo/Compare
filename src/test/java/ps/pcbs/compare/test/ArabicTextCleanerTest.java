@@ -19,41 +19,53 @@ public class ArabicTextCleanerTest {
 
 	@Test
 	public void testClean() {
-		assertEquals(cleaner.clean("and"),cleaner.clean("     _ *   + =  ) ( & ^ % $ # @ ! ~  : ;  ?> < } { ’ , . [ ] )"));
-		assertEquals(cleaner.clean(" \"مخمر موز\" "),cleaner.clean("مخمر موز"));
-		assertEquals(cleaner.clean("كيك  & بيك"), cleaner.clean("كيك  و بيك"));
-		assertEquals(cleaner.clean("art &  glft"), cleaner.clean("art and  glft"));
-		assertEquals(cleaner.clean(""),cleaner.clean(""));
-		assertEquals(cleaner.clean("المركز الفني للصيانه"),cleaner.clean("المركز الفني للصيانة"));
+		System.out.println(cleaner.clean("and"));
+		System.out.println(cleaner.clean(" \"مخمر موز\" "));
+		System.out.println(cleaner.clean("الامانة شركة"));
 		
-		assertEquals(cleaner.clean("كافتيريا الامانه"), cleaner.clean("كافتيريا الامانة"));
+		System.out.println(cleaner.clean("الامانةghj  شركة"));
+		System.out.println(cleaner.clean("تكسي   المأمون "));
 		
-		assertEquals(cleaner.clean("تكسي المأمون "), cleaner.clean("تكسي المامون  "));
+		System.out.println(cleaner.clean("كيك  & بيك"));
+		System.out.println(cleaner.clean("art &  glft"));
+		System.out.println(cleaner.clean(""));
+		System.out.println(cleaner.clean("المركز الفني للصيانه"));
 		
-		assertEquals(cleaner.clean("شركه الإعتماد"), cleaner.clean("شركه الاعتماد"));
+		System.out.println(cleaner.clean("كافتيريا الامانه"));
 		
-		assertEquals(cleaner.clean("يور هوم 4"), cleaner.clean("فور يور هوم"));
+		System.out.println(cleaner.clean("تكسي المأمون "));
+		
+		System.out.println(cleaner.clean("شركه الإعتماد"));
+		
+		System.out.println(cleaner.clean("يور هوم 4"));
 		
 		
-		assertEquals(cleaner.clean("4 me"), cleaner.clean("for me"));
+		System.out.println(cleaner.clean("4 me"));
 		
 		//Step2
-		assertEquals(cleaner.clean("ابو محمد"), cleaner.clean("ابومحمد"));
+		System.out.println(cleaner.clean("ابو محمد"));
 		
-		assertEquals(cleaner.clean("أبو أحمد"), cleaner.clean("أبوأحمد"));
+		System.out.println(cleaner.clean("أبو    أحمد"));
+
+		System.out.println(cleaner.clean("عبد   الكريم"));
 		
-		assertEquals(cleaner.clean("عبد الكريم"), cleaner.clean("عبدالكريم"));
+		System.out.println(cleaner.clean("engendré par un aléa donné"));
+		System.out.println(cleaner.clean("العمري فاروق"));
+		System.out.println(cleaner.clean("ياسين العمري"));
+		System.out.println(cleaner.clean("ياسين   العمري"));
+		System.out.println(cleaner.clean("ياسين العمري "));
+		System.out.println(cleaner.clean("  ياسين العمري"));
+		System.out.println(cleaner.clean(" ياسين   العمري "));
 		
-		assertEquals(cleaner.clean("دير ابوضعيف"), cleaner.clean("ديرابوضعيف"));
-		assertEquals(cleaner.clean("بير زيت"), cleaner.clean("بيرزيت"));
-		assertEquals(cleaner.clean("كفر عين"), cleaner.clean("كفر عين"));
-		assertEquals(cleaner.clean("عين يبرود"), cleaner.clean("عينيبرود"));
-		assertEquals(cleaner.clean("نيو ستايل"), cleaner.clean("نيوستايل"));
-		assertEquals(cleaner.clean("بيت لقيا"), cleaner.clean("بيتلقيا"));
+		System.out.println(cleaner.clean("مؤنسة الشامي عبد الرؤوف و شيماء بغدادي"));
+		System.out.println(cleaner.clean("كفر عين"));
+		System.out.println(cleaner.clean("عين يبرود"));
+		System.out.println(cleaner.clean("نيو ستايل"));
+		System.out.println(cleaner.clean("بيت لقيا"));
 		
 		
 		
-		assertEquals(cleaner.clean("BLUE DRY CLEAN"), cleaner.clean("blue dry clean"));
+		System.out.println(cleaner.clean("BLUE DRY CLEAN"));
 		
 		
 		//Step5

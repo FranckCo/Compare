@@ -36,8 +36,8 @@ public class TokenListCleanerTest {
 
 		assertEquals("", cleaner.clean("دكتور"));
 		
-		assertEquals("", cleaner.clean("الشركة"));
 		
+		System.out.println(cleaner.clean("شركة الامانة "));
 		
 
 		
