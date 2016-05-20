@@ -20,7 +20,7 @@ import ps.pcbs.compare.Config;
 
 public class ISIC4To3 {
 	private Map<String, Pair> IsicCorrespondance;
-	private String csvFile = "src/main/csv/isic3.csv";
+	private String csvFile = Config.ENTREE+"/isic3.csv";
 
 	public Map<String, Pair> getIsicCorrespondance() {
 		return IsicCorrespondance;

@@ -18,7 +18,7 @@ public class ISICMap {
 	
 	
 	private Map<String,String> IsicCorrespondance;
-	private String csvFile="C:/Users/lenovo/Compare/files/csv/isic4_2013.csv";
+	private String csvFile=Config.ENTREE+"/isic4_2013.csv";
 	
 	public Map<String, String> getIsicCorrespondance() {
 		return IsicCorrespondance;
