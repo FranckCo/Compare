@@ -9,6 +9,7 @@ import java.util.Set;
 import ps.pcbs.compare.Config;
 import no.priv.garshol.duke.Comparator;
 
+
 public class CommercialOwnerNameComparator implements Comparator {
 
 	private String separator = Config.DEFAULT_TOKEN_SEPARATOR;
@@ -37,29 +38,113 @@ public class CommercialOwnerNameComparator implements Comparator {
 		String ownName1 = getOwnerName(sequence1);
 		String ownName2 = getOwnerName(sequence2);
 
-		int maxLength = Math.max(Arrays.asList(commName1.split(" ")).size(),
+		int maxLengthCom   = Math.max(Arrays.asList(commName1.split(" ")).size(),
 				Arrays.asList(commName2.split(" ")).size());
-		// If the number of common elements is equal or more to the threshold,
+		int maxLengthOw    = Math.max(Arrays.asList(ownName1.split(" ")).size(),
+				Arrays.asList(ownName2.split(" ")).size());
+		int maxLengthOwCom =  Math.max(Arrays.asList(ownName1.split(" ")).size(),
+				Arrays.asList(commName2.split(" ")).size());
+		int maxLengthComOw =  Math.max(Arrays.asList(commName1.split(" ")).size(),
+				Arrays.asList(ownName2.split(" ")).size());			
+		// If the number of common elements is equal || more to the threshold,
 
 //		if (v1.equals(v2))
 //			return 1.0;
 		
-		if(maxLength==3) return (countCommonWords(commName1, commName2)==3 ? 1.0: 0.0);
-		if (maxLength > 5) {
+		int ccom_CN=countCommonWords(commName1,commName2);
+		int ccom_OW=countCommonWords(ownName1,ownName2);
+		
+		int ccom_OW_CN=countCommonWords(ownName1,commName2);
+		int ccom_CN_OW=countCommonWords(commName1,ownName2);
+		
+		double comm_Score=0; 
+		double own_Score=0;
+		
+		double final_Score=0;
+		int scoreFin=0;
+		
 
-			return (countCommonWords(commName1, commName2) / maxLength > 0.75 ? 1.0
-					: 0.0);
-
+		// Cas MC>=5
+		if (maxLengthCom >= 5) {
+			if (ccom_CN>3){
+				comm_Score=1;
+				} else {
+					if(ccom_CN==2 || ccom_CN==3){
+						comm_Score=0.5;
+					} else {
+						comm_Score=0;
+					}
+				}
 		} else {
-			if (countCommonWords(commName1, commName2) >= 3)
-				return (countCommonWords(ownName1, ownName2) >= 1 ? 1.0 : 0.0);
-			if (countCommonWords(commName1, commName2) >= 2)
-				return (countCommonWords(ownName1, ownName2) >= 2 ? 1.0 : 0.0);
-//			if (countCommonWords(commName1, commName2) >= 1)
-//				return (countCommonWords(ownName1, ownName2) >= 3 ? 1.0 : 0.0);
+			// Cas MC=3 ou 4 
+			if (maxLengthCom==3 || maxLengthCom==4){
+				if (ccom_CN>=3){
+				comm_Score=1;
+				} else {
+					if(ccom_CN==2){
+						comm_Score=0.5;
+					} else {
+						comm_Score=0;
+					}
+				}
+			}
 		}
-		return 0.0;
-	}
+		
+		// Cas MO>=5
+		if  (maxLengthOw>=5) { 
+			if(ccom_OW>=3){ own_Score=1; } else { own_Score=0;}
+		} 
+		// Cas MO=3 ou 4
+		if (maxLengthOw==3 || maxLengthOw==4){
+			if (ccom_OW>=3){ own_Score = 1;	} else {
+				if (ccom_OW==2) { own_Score =0.5;} else {own_Score = 0;}
+			}
+		} 
+		// Cas où les deux Own_Name ont deux mots et deux mots en commun
+		if (maxLengthOw==2 && ccom_OW==2) {own_Score=1;}
+		
+		
+		final_Score = own_Score + comm_Score;
+		
+		if (final_Score>=1) {scoreFin=1;} else {
+			// Sinon on compare en croisant
+					
+			  // Cas MO>=5
+		if  (maxLengthOwCom >=5) { 
+			if(ccom_OW_CN >=3){ own_Score=1; } else { own_Score=0;}
+		} 
+		// Cas MO=3 ou 4
+		if (maxLengthOwCom ==3 || maxLengthOwCom ==4){
+			if (ccom_OW_CN >=3){ own_Score = 1;	} else {
+				if (ccom_OW_CN ==2) { own_Score =0.5;} else {own_Score = 0;}
+			}
+		} 
+		// Cas où les deux Own_Name ont deux mots et deux mots en commun
+		if (maxLengthOwCom==2 && ccom_OW_CN ==2) {own_Score=1;} 
+		
+			  // Cas MO>=5
+		if  (maxLengthComOw >=5) { 
+			if(ccom_CN_OW >=3){ comm_Score=1; } else { comm_Score=0;}
+		}
+		
+		// Cas MO=3 ou 4
+		if (maxLengthComOw ==3 || maxLengthComOw ==4){
+			if (ccom_CN_OW >=3){ comm_Score = 1;	} else {
+				if (ccom_CN_OW ==2) { comm_Score =0.5;} else {comm_Score = 0;}
+			}
+		} 
+		// Cas où les deux Own_Name ont deux mots et deux mots en commun
+		if (maxLengthComOw==2 && ccom_CN_OW ==2) {comm_Score=1;}
+		
+		final_Score = own_Score + comm_Score;
+		
+		if (final_Score>=1) {scoreFin=1;} else {scoreFin=0;}
+		
+		}
+		return scoreFin;
+	   }
+
+
 
 	private String getOwnerName(String[] sequence1) {
 	
